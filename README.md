@@ -20,6 +20,10 @@ minimum to get started, not as the absolute minimum.
 * basic skills of Javascript, Jquery, Web Components, Lit Library
 * a workspace `config/www`
 
+## TODO: Add How to: HACS installation 
+
+## TODO: Manual Installation
+
 ## Cloning the Repository
 
 You may clone this repository into your workspace and follow along.
@@ -32,6 +36,7 @@ give you, when you click the button `Code`. If your setup is well done, you
 should prefer `SSH` over `HTTPS`. This allows you to easily push to your
 repository.
 
+##  For further deep-dive into the code go to code-explainer.md
 ## The Card Code
 
 Find the code in the file named `survey-js-form-card.js` alongside with this README.
