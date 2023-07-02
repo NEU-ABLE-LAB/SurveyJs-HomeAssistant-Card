@@ -742,7 +742,7 @@ We are utilizing a countdown timer so that the user can submit their response be
   }
 ```
 
-i) Custom css
+i) Custom css and icon
 
 Custom css file content: 
 
@@ -886,7 +886,16 @@ And declare the icon css accordingly at a question level
   }
 ```
 
-i) UI render
+j) Entities
+
+SurveyJs card totally depends on two entities:
+
+1) Sensor: [`Documentation 1`](https://www.home-assistant.io/integrations/sensor/) & [`Documentation 2`](https://developers.home-assistant.io/docs/core/entity/sensor/)
+    * Sensor entity is used to store surveyjs form data as well as status cycles such as idle, sent, initiated, and received.
+2) input_select: [`Documentation`](https://www.home-assistant.io/integrations/input_select/)
+    * Input select entity is used to monitor surveyjs lifecycle state changes; anytime the state of the Input select entity changes, the same state change is triggered in the surveyjs sensor entity.
+
+k) UI render
 
 ```js
   render() {
@@ -899,13 +908,23 @@ i) UI render
   }
 ```
 
-j) CSS
+l) CSS
 
-Use the custom imported nouislider and global variables.
+Use the custom imported nouislider and global variables to load css and using getCustomCss function, custom css can be applied to the DOM.
 
 ```js
   static get styles() {
     console.log(this.config);
     return [nouisliderStyles, globalStyles];
+  }
+  
+    async getCustomCss() {
+    const customCss = this.config?.customCss;
+    if (customCss) {
+      this.customCss = await import(this.config?.customCss);
+      let style = this.shadowRoot.createElement("style");
+      style.innerHTML = this.customCss?.default;
+      this.shadowRoot.prepend(style);
+    }
   }
 ```
