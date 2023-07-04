@@ -16,7 +16,7 @@ const customCss = `.rating-item {
   color: blue;
   fill: var(--sjs-general-forecolor, var(--foreground, #161616));
   font-size: calc(2 * var(--base-unit, 8px));
-  width: 100%;
+  width: 90%;
   margin: auto;
 }
 .boolean {
@@ -33,7 +33,7 @@ const customCss = `.rating-item {
   box-sizing: border-box;
   background: var(--sjs-question-background, var(--background, #fff));
   box-shadow: 0px 1px 2px rgba(0,0,0,.15);
-  padding: 0px 10px 30px 10px !important;
+  padding: 10px 35px 35px 35px !important;
 }
 // .circle_icon::before {
 //     margin: 5px;
