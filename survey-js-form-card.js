@@ -60,6 +60,11 @@ class SurveyCard extends LitElement {
       ).done((script, textStatus) => {
         console.log("Survey JS Widgets loaded");
       });
+      $.getScript(
+        "https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.4/showdown.min.js"
+      ).done((script, textStatus) => {
+        console.log("Showdown loaded");
+      });
     });
   }
 
@@ -224,11 +229,20 @@ class SurveyCard extends LitElement {
   cssClassUpdation(classes, classKey, classValue, questionType) {
     console.log(classes, classKey, classValue, questionType, "Classes");
     classKey.forEach((v, i) => {
-      if (questionType == "rating" && v == "title") {
-        classes[v] = classes[v].replace("sd-question__title", classValue[i]);
-      } else {
-        classes[v] = classValue[i];
-      }
+      classes[v] = classValue[i];
+    });
+    var converter = new showdown.Converter();
+    this.survey.onTextMarkdown.add(function (survey, options) {
+      //convert the markdown text to html
+
+      console.log(options);
+
+      var str = converter.makeHtml(options.text);
+      //remove root paragraphs <p></p>
+      str = str.substring(3);
+      str = str.substring(0, str.length - 4);
+      //set html
+      options.html = str;
     });
   }
 
