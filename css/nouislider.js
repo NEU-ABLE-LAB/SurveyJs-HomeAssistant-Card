@@ -19,7 +19,7 @@ export const nouisliderStyles = css`
   }
   .noUi-handle {
     border-radius: 50%;
-    background: lightblue;
+    background: var(--app-header-background-color);
     box-shadow: none;
     width: 20px !important;
     height: 20px !important;
