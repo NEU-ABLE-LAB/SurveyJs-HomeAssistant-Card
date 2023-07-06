@@ -4,8 +4,8 @@ import {
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 import "https://unpkg.com/nouislider/dist/nouislider.min.js";
 import "https://unpkg.com/jquery";
-import { nouisliderStyles } from "./css/nouislider.js";
-import { globalStyles } from "./css/global.js";
+import { nouisliderStyles } from "/local/css/nouislider.js";
+import { globalStyles } from "../css/global.js";
 
 class SurveyCard extends LitElement {
   static get properties() {
