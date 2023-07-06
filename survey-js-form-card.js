@@ -263,10 +263,10 @@ class SurveyCard extends LitElement {
     `;
   }
 
-  // static get styles() {
-  //   console.log(this.config);
-  //   return [nouisliderStyles, globalStyles];
-  // }
+  static get styles() {
+    console.log(this.config);
+    return [nouisliderStyles, globalStyles];
+  }
 }
 
 customElements.define("survey-card", SurveyCard);
