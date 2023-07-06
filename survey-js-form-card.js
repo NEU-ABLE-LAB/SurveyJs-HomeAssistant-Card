@@ -21,6 +21,8 @@ class SurveyCard extends LitElement {
     this.survey_timer = null;
     this.survey_state = "";
     this.customCss = "";
+    this.nouisliderStyles = "";
+    this.globalcss = "";
     this.getCustomCss();
 
     setTimeout(() => {
@@ -70,10 +72,18 @@ class SurveyCard extends LitElement {
 
   async getCustomCss() {
     const customCss = this.config?.customCss;
-    if (customCss) {
+    const noUiSliderStyles = this.config?.nouisliderStyles;
+    const globalCss = this.config?.globalCss;
+    if (customCss && noUiSliderStyles && globalCss) {
       this.customCss = await import(this.config?.customCss);
+      this.noUiSliderStyles = await import(this.config?.noUiSliderStyles);
+      this.globalCss = await import(this.config?.globalCss);
+
       let style = this.shadowRoot.createElement("style");
       style.innerHTML = this.customCss?.default;
+      style.innerHTML = this.noUiSliderStyles?.default;
+      style.innerHTML = this.globalCss?.default;
+
       this.shadowRoot.prepend(style);
     }
   }
@@ -263,10 +273,10 @@ class SurveyCard extends LitElement {
     `;
   }
 
-  static get styles() {
-    console.log(this.config);
-    return [nouisliderStyles, globalStyles];
-  }
+  // static get styles() {
+  //   console.log(this.config);
+  //   return [nouisliderStyles, globalStyles];
+  // }
 }
 
 customElements.define("survey-card", SurveyCard);
