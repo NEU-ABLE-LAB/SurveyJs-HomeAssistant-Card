@@ -15,7 +15,7 @@ export const nouisliderStyles = css`
     display: none;
   }
   .noUi-horizontal {
-    height: 10px;
+    height: 7px;
   }
   .noUi-handle {
     border-radius: 50%;
