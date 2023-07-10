@@ -17,7 +17,7 @@ const nouisliderStyles = `
   }
   .noUi-handle {
     border-radius: 50%;
-    background: black;
+    background: green;
     box-shadow: none;
     width: 20px !important;
     height: 20px !important;
@@ -26,6 +26,14 @@ const nouisliderStyles = `
   .noUi-handle:after,
   .noUi-handle:before {
     background: none;
+  }
+  .noUi-tooltip {
+    display: none;
+  }
+  .noUi-active .noUi-tooltip {
+    display: block;
+    left: -200%;
+    bottom: -35%;
   }
 `;
 
