@@ -1,6 +1,4 @@
-import { css } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
-
-export const nouisliderStyles = css`
+const nouisliderStyles = `
   .noUi-target {
     margin-bottom: 20px !important;
     margin-top: -40px;
@@ -19,7 +17,7 @@ export const nouisliderStyles = css`
   }
   .noUi-handle {
     border-radius: 50%;
-    background: var(--app-header-background-color);
+    background: black;
     box-shadow: none;
     width: 20px !important;
     height: 20px !important;
@@ -30,3 +28,5 @@ export const nouisliderStyles = css`
     background: none;
   }
 `;
+
+export default nouisliderStyles;

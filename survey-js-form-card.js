@@ -4,8 +4,6 @@ import {
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 import "https://unpkg.com/nouislider/dist/nouislider.min.js";
 import "https://unpkg.com/jquery";
-// import { nouisliderStyles } from "../css/nouislider.js";
-// import { globalStyles } from "../css/global.js";
 
 class SurveyCard extends LitElement {
   static get properties() {
@@ -21,8 +19,8 @@ class SurveyCard extends LitElement {
     this.survey_timer = null;
     this.survey_state = "";
     this.customCss = "";
-    this.nouisliderStyles = "";
-    this.globalcss = "";
+    this.noUiSliderStyles = "";
+    this.globalCss = "";
     this.getCustomCss();
 
     setTimeout(() => {
@@ -72,19 +70,31 @@ class SurveyCard extends LitElement {
 
   async getCustomCss() {
     const customCss = this.config?.customCss;
-    const noUiSliderStyles = this.config?.nouisliderStyles;
+    const noUiSliderStyles = this.config?.noUiSliderStyles;
     const globalCss = this.config?.globalCss;
     if (customCss && noUiSliderStyles && globalCss) {
       this.customCss = await import(this.config?.customCss);
       this.noUiSliderStyles = await import(this.config?.noUiSliderStyles);
       this.globalCss = await import(this.config?.globalCss);
 
-      let style = this.shadowRoot.createElement("style");
-      style.innerHTML = this.customCss?.default;
-      style.innerHTML = this.noUiSliderStyles?.default;
-      style.innerHTML = this.globalCss?.default;
+      console.log(
+        this.customCss?.default,
+        this.noUiSliderStyles?.default,
+        this.globalCss?.default
+      );
 
-      this.shadowRoot.prepend(style);
+      let prependStyle = this.shadowRoot.createElement("style");
+
+      let appendStyle = this.shadowRoot.createElement("style");
+
+      prependStyle.innerHTML = this.customCss?.default;
+
+      this.shadowRoot.prepend(prependStyle);
+
+      appendStyle.innerHTML =
+        this.noUiSliderStyles?.default + " " + this.globalCss?.default;
+
+      this.shadowRoot.append(appendStyle);
     }
   }
 
@@ -272,11 +282,6 @@ class SurveyCard extends LitElement {
       <div id="surveyElement"></div>
     `;
   }
-
-  // static get styles() {
-  //   console.log(this.config);
-  //   return [nouisliderStyles, globalStyles];
-  // }
 }
 
 customElements.define("survey-card", SurveyCard);
