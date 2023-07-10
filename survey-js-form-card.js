@@ -73,9 +73,15 @@ class SurveyCard extends LitElement {
     const noUiSliderStyles = this.config?.noUiSliderStyles;
     const globalCss = this.config?.globalCss;
     if (customCss && noUiSliderStyles && globalCss) {
-      this.customCss = await import(this.config?.customCss);
-      this.noUiSliderStyles = await import(this.config?.noUiSliderStyles);
-      this.globalCss = await import(this.config?.globalCss);
+      this.customCss = await import(
+        this.config?.customCss + "?" + Math.random()
+      );
+      this.noUiSliderStyles = await import(
+        this.config?.noUiSliderStyles + "?" + Math.random()
+      );
+      this.globalCss = await import(
+        this.config?.globalCss + "?" + Math.random()
+      );
 
       console.log(
         this.customCss?.default,
