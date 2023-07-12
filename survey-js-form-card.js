@@ -214,9 +214,11 @@ class SurveyCard extends LitElement {
     
     const sliders = questions.filter(q => q.getType() === 'nouislider');
     
-    sliders.forEach(function(slider) {
     
-      slider.on('pointerdown', function() {
+    sliders.forEach(function(slider) {
+      sliderElm = slider.noUislider.target
+      
+      sliderElm.on('update', function() {
         slider.handleElement.classList.add('color-change');
       });
       
