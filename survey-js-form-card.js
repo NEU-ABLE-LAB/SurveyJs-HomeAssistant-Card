@@ -212,7 +212,7 @@ class SurveyCard extends LitElement {
     // adds click handler 
     const questions = this.survey.getAllQuestions();
     
-    const sliders = questionsfilter(q => q.getType() === 'nouislider');
+    const sliders = questions.filter(q => q.getType() === 'nouislider');
     
     sliders.forEach(function(slider) {
     
