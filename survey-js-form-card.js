@@ -208,6 +208,7 @@ class SurveyCard extends LitElement {
     $(this.shadowRoot.getElementById("surveyElement")).Survey({
       model: this.survey,
     });
+    
     // adds click handler 
     const sliders = this.survey.getAllQuestionsByType('nouislider');
     
@@ -216,6 +217,8 @@ class SurveyCard extends LitElement {
       slider.noUiSlider.on('pointerdown', function() {
         slider.handleElement.classList.add('color-change');
       });
+      
+    });
   }
 
   pageCssLogic(options) {
