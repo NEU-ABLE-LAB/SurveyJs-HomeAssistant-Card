@@ -210,7 +210,9 @@ class SurveyCard extends LitElement {
     });
     
     // adds click handler 
-    const sliders = this.survey.getAllQuestionsByType('nouislider');
+    const questions = this.survey.getAllQuestions();
+    
+    const sliders = questionsfilter(q => q.getType() === 'nouislider');
     
     sliders.forEach(function(slider) {
     
