@@ -216,7 +216,7 @@ class SurveyCard extends LitElement {
     
     sliders.forEach(function(slider) {
     
-      slider.noUiSlider.on('pointerdown', function() {
+      slider.on('pointerdown', function() {
         slider.handleElement.classList.add('color-change');
       });
       
