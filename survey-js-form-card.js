@@ -216,7 +216,7 @@ class SurveyCard extends LitElement {
     
     
     sliders.forEach(function(slider) {
-      sliderElem = slider.noUislider.target
+      sliderElem = slider.noUislider
       sliderElem.on('start', (values, handle, unencoded, tap, positions, noUiSlider) => {
         let handleElem = document.querySelectorAll("div.noUi-handle[data-handle='" + handle + "']")[0];
         let currentClass = handleElem.className;
