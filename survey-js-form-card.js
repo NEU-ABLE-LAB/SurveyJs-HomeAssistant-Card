@@ -216,10 +216,12 @@ class SurveyCard extends LitElement {
     
     
     sliders.forEach(function(slider) {
-      sliderElm = slider.noUislider.target
-      
-      sliderElm.on('update', function() {
-        slider.handleElement.classList.add('color-change');
+      sliderElem = slider.noUislider.target
+      sliderElem.on('start', (values, handle, unencoded, tap, positions, noUiSlider) => {
+        let handleElem = document.querySelectorAll("div.noUi-handle[data-handle='" + handle + "']")[0];
+        let currentClass = handleElem.className;
+        let updateClass = currentClass + '-color-change'
+        handleElem.classList.add(updateClass);
       });
       
     });
