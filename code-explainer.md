@@ -444,7 +444,7 @@ class SurveyCard extends LitElement {
             //   state: "idle",
             // });
             window.location.href = "/";
-          }, 2000);
+          }, 1000);
         });
     });
 
