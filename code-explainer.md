@@ -15,7 +15,6 @@ class SurveyCard extends LitElement {
 ```
 
 ### Visit the Official Documentation
-
 You should know [the official
 documentation](https://developers.home-assistant.io/docs/frontend/custom-ui/custom-card),
 too. This tutorial is based upon it.
@@ -278,8 +277,6 @@ import {
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 import "https://unpkg.com/nouislider/dist/nouislider.min.js";
 import "https://unpkg.com/jquery";
-import { nouisliderStyles } from "./css/nouislider.js";
-import { globalStyles } from "./css/global.js";
 
 class SurveyCard extends LitElement {
   static get properties() {
@@ -295,6 +292,8 @@ class SurveyCard extends LitElement {
     this.survey_timer = null;
     this.survey_state = "";
     this.customCss = "";
+    this.noUiSliderStyles = "";
+    this.globalCss = "";
     this.getCustomCss();
 
     setTimeout(() => {
@@ -334,16 +333,47 @@ class SurveyCard extends LitElement {
       ).done((script, textStatus) => {
         console.log("Survey JS Widgets loaded");
       });
+      $.getScript(
+        "https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.4/showdown.min.js"
+      ).done((script, textStatus) => {
+        console.log("Showdown loaded");
+      });
     });
   }
 
   async getCustomCss() {
     const customCss = this.config?.customCss;
-    if (customCss) {
-      this.customCss = await import(this.config?.customCss);
-      let style = this.shadowRoot.createElement("style");
-      style.innerHTML = this.customCss?.default;
-      this.shadowRoot.prepend(style);
+    const noUiSliderStyles = this.config?.noUiSliderStyles;
+    const globalCss = this.config?.globalCss;
+    if (customCss && noUiSliderStyles && globalCss) {
+      this.customCss = await import(
+        this.config?.customCss + "?" + Math.random()
+      );
+      this.noUiSliderStyles = await import(
+        this.config?.noUiSliderStyles + "?" + Math.random()
+      );
+      this.globalCss = await import(
+        this.config?.globalCss + "?" + Math.random()
+      );
+
+      console.log(
+        this.customCss?.default,
+        this.noUiSliderStyles?.default,
+        this.globalCss?.default
+      );
+
+      let prependStyle = this.shadowRoot.createElement("style");
+
+      let appendStyle = this.shadowRoot.createElement("style");
+
+      prependStyle.innerHTML = this.customCss?.default;
+
+      this.shadowRoot.prepend(prependStyle);
+
+      appendStyle.innerHTML =
+        this.noUiSliderStyles?.default + " " + this.globalCss?.default;
+
+      this.shadowRoot.append(appendStyle);
     }
   }
 
@@ -451,6 +481,23 @@ class SurveyCard extends LitElement {
     $(this.shadowRoot.getElementById("surveyElement")).Survey({
       model: this.survey,
     });
+    
+    // adds click handler 
+    const questions = this.survey.getAllQuestions();
+    
+    const sliders = questions.filter(q => q.getType() === 'nouislider');
+    
+    
+    sliders.forEach(function(slider) {
+      sliderElem = slider.noUislider
+      sliderElem.on('start', (values, handle, unencoded, tap, positions, noUiSlider) => {
+        let handleElem = document.querySelectorAll("div.noUi-handle[data-handle='" + handle + "']")[0];
+        let currentClass = handleElem.className;
+        let updateClass = currentClass + '-color-change'
+        handleElem.classList.add(updateClass);
+      });
+      
+    });
   }
 
   pageCssLogic(options) {
@@ -498,12 +545,24 @@ class SurveyCard extends LitElement {
   cssClassUpdation(classes, classKey, classValue, questionType) {
     console.log(classes, classKey, classValue, questionType, "Classes");
     classKey.forEach((v, i) => {
-      if (questionType == "rating" && v == "title") {
-        classes[v] = classes[v].replace("sd-question__title", classValue[i]);
-      } else {
-        classes[v] = classValue[i];
-      }
+      classes[v] = classValue[i];
     });
+
+    setTimeout(() => {
+      var converter = new showdown.Converter();
+      this.survey.onTextMarkdown.add(function (survey, options) {
+        //convert the markdown text to html
+
+        console.log(options, options.html);
+
+        var str = converter.makeHtml(options.text);
+        //remove root paragraphs <p></p>
+        str = str.substring(3);
+        str = str.substring(0, str.length - 4);
+        //set html
+        options.html = str;
+      });
+    }, 1);
   }
 
   render() {
@@ -518,11 +577,6 @@ class SurveyCard extends LitElement {
       />
       <div id="surveyElement"></div>
     `;
-  }
-
-  static get styles() {
-    console.log(this.config);
-    return [nouisliderStyles, globalStyles];
   }
 }
 
@@ -930,3 +984,53 @@ Use the custom imported nouislider and global variables to load css and using ge
     }
   }
 ```
+
+l) Mark Down Images
+
+Firstly import the showdown package
+
+```js
+      $.getScript(
+        "https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.4/showdown.min.js"
+      ).done((script, textStatus) => {
+        console.log("Showdown loaded");
+      });
+      
+    setTimeout(() => {
+      var converter = new showdown.Converter();
+      this.survey.onTextMarkdown.add(function (survey, options) {
+        //convert the markdown text to html
+
+        console.log(options, options.html);
+
+        var str = converter.makeHtml(options.text);
+        //remove root paragraphs <p></p>
+        str = str.substring(3);
+        str = str.substring(0, str.length - 4);
+        //set html
+        options.html = str;
+      });
+    }, 1);
+```
+
+Secondly, apply markdown and image path beside any text
+
+title: ![A dog](/local/img/thermometer-svgrepo-com.svg =18x18) What room are you in?
+
+m) Page cache removal
+
+When new modifications are posted to the HACS github repository, the old changes are not reflected by removing the cached page.
+ 
+ Below is the code to remove page cache
+ 
+ ```js
+       this.customCss = await import(
+        this.config?.customCss + "?" + Math.random()
+      );
+      this.noUiSliderStyles = await import(
+        this.config?.noUiSliderStyles + "?" + Math.random()
+      );
+      this.globalCss = await import(
+        this.config?.globalCss + "?" + Math.random()
+      );
+ ```
