@@ -25,11 +25,13 @@ class SurveyCard extends LitElement {
 
     setTimeout(() => {
       if (
-        this._hass?.states["input_select.survey_lifecycle"]?.state === "sent" ||
-        this._hass?.states["input_select.survey_lifecycle"]?.state === "started"
+        this._hass?.states[this.config?.state_life_cycle_entity]?.state ===
+          "sent" ||
+        this._hass?.states[this.config?.state_life_cycle_entity]?.state ===
+          "started"
       ) {
         this.startTimer(
-          this._hass.states["input_select.survey_lifecycle"].state
+          this._hass.states[this.config?.state_life_cycle_entity].state
         );
       } else {
         clearInterval(this.survey_timer);
@@ -112,12 +114,16 @@ class SurveyCard extends LitElement {
         countDownDate.getMinutes() + this.config.expiry_time_min
       );
       // this._hass.callService("input_select.select_option", "started", {
-      //   entity_id: "input_select.survey_lifecycle",
+      //   entity_id: this.config?.state_life_cycle_entity,
       // });
 
-      this._hass.callApi("POST", "states/input_select.survey_lifecycle", {
-        state: "started",
-      });
+      this._hass.callApi(
+        "POST",
+        "states/" + this.config?.state_life_cycle_entity,
+        {
+          state: "started",
+        }
+      );
 
       setTimeout(() => {
         this._hass.callApi("POST", "states/" + this.config.entity, {
@@ -140,6 +146,18 @@ class SurveyCard extends LitElement {
       var now = new Date().getTime();
 
       var distance = countDownDate - now;
+
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      console.log(
+        days + "d " + hours + "h " + minutes + "m " + seconds + "s ",
+        thisHassNode.survey_timer
+      );
 
       if (distance < 0) {
         clearInterval(thisHassNode.survey_timer);
@@ -171,38 +189,40 @@ class SurveyCard extends LitElement {
     this.survey_state = "received";
 
     this.survey.onComplete.add((sender) => {
-      const results = {
-        user_name: this._hass.user.name,
-        survey_trigger: "Temp Change",
-        survey_response: sender.data,
-      };
 
-      this._hass
-        .callApi("POST", "states/" + this.config.entity, {
+      this._hass.callApi(
+        "POST",
+        "states/" + this.config?.state_life_cycle_entity,
+        {
           state: this.survey_state,
-          attributes: results,
-        })
-        .then((data) => {
-          console.log("Post Entity Data", data);
-          clearInterval(this.survey_timer);
-          let thank_you_element =
-            this.shadowRoot.querySelector(".sd-completedpage");
-          thank_you_element.innerText =
-            "Thank you for your response! Click here to return home.";
-          thank_you_element.style.cursor = "pointer";
-          thank_you_element.onclick = function () {
-            window.location.href = "/";
-          };
-          // setTimeout(() => {
-          //   // this._hass.callService("input_select.select_option", "idle", {
-          //   //   entity_id: "input_select.survey_lifecycle",
-          //   // });
-          //   // this._hass.callApi("POST", "states/input_select.survey_lifecycle", {
-          //   //   state: "idle",
-          //   // });
-          //   window.location.href = "/";
-          // }, 1000);
-        });
+        }
+      );
+
+      setTimeout(() => {
+        const results = {
+          user_name: this._hass.user.name,
+          survey_trigger: "Temp Change",
+          survey_response: sender.data,
+        };
+
+        this._hass
+          .callApi("POST", "states/" + this.config.entity, {
+            state: this.survey_state,
+            attributes: results,
+          })
+          .then((data) => {
+            console.log("Post Entity Data", data);
+            clearInterval(this.survey_timer);
+            let thank_you_element =
+              this.shadowRoot.querySelector(".sd-completedpage");
+            thank_you_element.innerText =
+              "Thank you for your response! Click here to return home.";
+            thank_you_element.style.cursor = "pointer";
+            thank_you_element.onclick = function () {
+              window.location.href = "/";
+            };
+          });
+      }, 500);
     });
 
     $(this.shadowRoot.getElementById("surveyElement")).Survey({
@@ -211,10 +231,9 @@ class SurveyCard extends LitElement {
 
     // adds click handler
     const questions = this.survey.getAllQuestions();
-    
-    const sliders = questions.filter(q => q.getType() === 'nouislider');
-    
-    
+
+    const sliders = questions.filter((q) => q.getType() === "nouislider");
+
     // sliders.forEach(function(slider) {
     //   sliderElem = slider.noUislider
     //   sliderElem.on('start', (values, handle, unencoded, tap, positions, noUiSlider) => {
@@ -223,7 +242,7 @@ class SurveyCard extends LitElement {
     //     let updateClass = currentClass + '-color-change'
     //     handleElem.classList.add(updateClass);
     //   });
-      
+
     // });
   }
 
