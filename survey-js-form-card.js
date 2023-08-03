@@ -193,23 +193,23 @@ class SurveyCard extends LitElement {
           thank_you_element.onclick = function () {
             window.location.href = "/";
           };
-          setTimeout(() => {
-            // this._hass.callService("input_select.select_option", "idle", {
-            //   entity_id: "input_select.survey_lifecycle",
-            // });
-            // this._hass.callApi("POST", "states/input_select.survey_lifecycle", {
-            //   state: "idle",
-            // });
-            window.location.href = "/";
-          }, 1000);
+          // setTimeout(() => {
+          //   // this._hass.callService("input_select.select_option", "idle", {
+          //   //   entity_id: "input_select.survey_lifecycle",
+          //   // });
+          //   // this._hass.callApi("POST", "states/input_select.survey_lifecycle", {
+          //   //   state: "idle",
+          //   // });
+          //   window.location.href = "/";
+          // }, 1000);
         });
     });
 
     $(this.shadowRoot.getElementById("surveyElement")).Survey({
       model: this.survey,
     });
-    
-    // adds click handler 
+
+    // adds click handler
     const questions = this.survey.getAllQuestions();
     
     const sliders = questions.filter(q => q.getType() === 'nouislider');
