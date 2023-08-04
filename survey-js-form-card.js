@@ -200,7 +200,7 @@ class SurveyCard extends LitElement {
       setTimeout(() => {
         if (this.config?.floor_plan_location) {
           sender.data.selectedFloorPlan =
-            this._hass.states[this.config?.floor_plan_location].state;
+            this._hass.states[this.config?.floor_plan_location]?.state;
         }
 
         const results = {
