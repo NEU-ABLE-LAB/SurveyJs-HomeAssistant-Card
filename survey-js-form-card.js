@@ -24,15 +24,24 @@ class SurveyCard extends LitElement {
     this.getCustomCss();
 
     setTimeout(() => {
+      this._hass.callService("python_script", "hass_entities", {
+        action: "set_state_attributes",
+        entity_id: this.config?.entity,
+        state: "started",
+        attributes: {
+          start_timer_date: "fedfad",
+        },
+      });
+
       if (
         this._hass?.states[this.config?.state_life_cycle_entity]?.state ===
           "sent" ||
         this._hass?.states[this.config?.state_life_cycle_entity]?.state ===
           "started"
       ) {
-        this.startTimer(
-          this._hass.states[this.config?.state_life_cycle_entity].state
-        );
+        // this.startTimer(
+        //   this._hass.states[this.config?.state_life_cycle_entity].state
+        // );
       } else {
         clearInterval(this.survey_timer);
         console.log("Interval Cleared");
@@ -125,31 +134,29 @@ class SurveyCard extends LitElement {
       //   }
       // );
 
-      this._hass.callService("python_script", "hass_entities", {
-        action: "set_state",
-        entity_id: this.config?.state_life_cycle_entity,
-        state: "started",
-      });
+      // this._hass.callService("python_script", "hass_entities", {
+      //   action: "set_state",
+      //   entity_id: this.config?.state_life_cycle_entity,
+      //   state: "started",
+      // });
 
-      setTimeout(() => {
-        // this._hass.callWS("POST", "states/" + this.config.entity, {
-        //   state: "started",
-        //   attributes: {
-        //     start_timer_date: countDownDate.getTime(),
-        //   },
-        // });
+      // setTimeout(() => {
+      // this._hass.callWS("POST", "states/" + this.config.entity, {
+      //   state: "started",
+      //   attributes: {
+      //     start_timer_date: countDownDate.getTime(),
+      //   },
+      // });
 
-        let varia = "dcafaesq";
-
-        this._hass.callService("python_script", "hass_entities", {
-          action: "set_state_attributes",
-          entity_id: this.config?.entity,
-          state: "started",
-          attributes: {
-            start_timer_date: varia,
-          },
-        });
-      }, 500);
+      // this._hass.callService("python_script", "hass_entities", {
+      //   action: "set_state_attributes",
+      //   entity_id: this.config?.entity,
+      //   state: "started",
+      //   attributes: {
+      //     start_timer_date: "cdafaes",
+      //   },
+      // });
+      // }, 500);
     } else if (state == "started") {
       // this._hass.callWS("GET", "states/" + this.config.entity).then((data) => {
       //   console.log("Get Entity Data", data);
