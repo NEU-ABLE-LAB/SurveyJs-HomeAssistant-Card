@@ -126,7 +126,7 @@ class SurveyCard extends LitElement {
       // );
 
       this._hass.callService("python_script", "hass_entities", {
-        action: "set_state_attributes",
+        action: "set_state",
         entity_id: this.config?.state_life_cycle_entity,
         state: "started",
       });
@@ -210,7 +210,7 @@ class SurveyCard extends LitElement {
 
     this.survey.onComplete.add((sender) => {
       this._hass.callService("python_script", "hass_entities", {
-        action: "set_state_attributes",
+        action: "set_state",
         entity_id: this.config?.state_life_cycle_entity,
         state: this.survey_state,
       });
