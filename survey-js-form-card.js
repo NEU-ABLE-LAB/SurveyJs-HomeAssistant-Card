@@ -126,9 +126,12 @@ class SurveyCard extends LitElement {
       // );
 
       this._hass.callService("python_script", "hass_entities", {
-        action: "set_state",
+        action: "set_state_attributes",
         entity_id: this.config?.state_life_cycle_entity,
         state: "started",
+        attributes: {
+          start_timer_date: "ooo",
+        },
       });
 
       setTimeout(() => {
@@ -144,9 +147,8 @@ class SurveyCard extends LitElement {
           entity_id: this.config?.entity,
           state: "started",
           attributes: {
-            start_timer_date: "dcafaesq",
+            start_timer_date: "ppp",
           },
-          return_response: true
         });
       }, 500);
     } else if (state1 == "started") {
