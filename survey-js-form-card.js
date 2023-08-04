@@ -139,12 +139,14 @@ class SurveyCard extends LitElement {
         //   },
         // });
 
+        let varia = "dcafaesq";
+
         this._hass.callService("python_script", "hass_entities", {
           action: "set_state_attributes",
           entity_id: this.config?.entity,
           state: "started",
           attributes: {
-            start_timer_date: "dcafaesq",
+            start_timer_date: varia,
           },
         });
       }, 500);
