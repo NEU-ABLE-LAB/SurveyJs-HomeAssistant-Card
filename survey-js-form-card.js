@@ -125,39 +125,39 @@ class SurveyCard extends LitElement {
       //   }
       // );
 
-      // this._hass.callService("python_script", "hass_entities", {
-      //   action: "set_state",
-      //   entity_id: this.config?.state_life_cycle_entity,
-      //   state: "started",
-      // });
-
-      // setTimeout(() => {
-      // this._hass.callWS("POST", "states/" + this.config.entity, {
-      //   state: "started",
-      //   attributes: {
-      //     start_timer_date: countDownDate.getTime(),
-      //   },
-      // });
-
       this._hass.callService("python_script", "hass_entities", {
-        action: "set_state_attributes",
-        entity_id: this.config?.entity,
+        action: "set_state",
+        entity_id: this.config?.state_life_cycle_entity,
         state: "started",
-        attributes: {
-          "start_timer_date": "dcafaesq",
-        },
       });
-      // }, 500);
+
+      setTimeout(() => {
+        // this._hass.callWS("POST", "states/" + this.config.entity, {
+        //   state: "started",
+        //   attributes: {
+        //     start_timer_date: countDownDate.getTime(),
+        //   },
+        // });
+
+        this._hass.callService("python_script", "hass_entities", {
+          action: "set_state_attributes",
+          entity_id: this.config?.entity,
+          state: "started",
+          attributes: {
+            start_timer_date: "dcafaesq",
+          },
+        });
+      }, 500);
     } else if (state == "started") {
       // this._hass.callWS("GET", "states/" + this.config.entity).then((data) => {
       //   console.log("Get Entity Data", data);
       //   countDownDate = new Date(data.attributes.start_timer_date);
       // });
-      countDownDate = new Date(
-        this._hass.states[
-          this.config?.state_life_cycle_entity
-        ].attributes.start_timer_date
-      );
+      // countDownDate = new Date(
+      //   this._hass.states[
+      //     this.config?.state_life_cycle_entity
+      //   ].attributes.start_timer_date
+      // );
     }
 
     var thisHassNode = this;
@@ -223,38 +223,38 @@ class SurveyCard extends LitElement {
       //   }
       // );
 
-      // setTimeout(() => {
-      if (this.config?.floor_plan_location) {
-        sender.data.selectedFloorPlan =
-          this._hass.states[this.config?.floor_plan_location]?.state;
-      }
+      setTimeout(() => {
+        if (this.config?.floor_plan_location) {
+          sender.data.selectedFloorPlan =
+            this._hass.states[this.config?.floor_plan_location]?.state;
+        }
 
-      const results = {
-        user_name: this._hass.user.name,
-        survey_trigger: "Temp Change",
-        survey_response: sender.data,
-      };
+        const results = {
+          user_name: this._hass.user.name,
+          survey_trigger: "Temp Change",
+          survey_response: sender.data,
+        };
 
-      this._hass
-        .callService("python_script", "hass_entities", {
-          action: "set_state_attributes",
-          entity_id: this.config?.entity,
-          state: this.survey_state,
-          attributes: results,
-        })
-        .then((data) => {
-          console.log("Post Entity Data", data);
-          clearInterval(this.survey_timer);
-          let thank_you_element =
-            this.shadowRoot.querySelector(".sd-completedpage");
-          thank_you_element.innerText =
-            "Thank you for your response! Click here to return home.";
-          thank_you_element.style.cursor = "pointer";
-          thank_you_element.onclick = function () {
-            window.location.href = "/";
-          };
-        });
-      // }, 500);
+        this._hass
+          .callService("python_script", "hass_entities", {
+            action: "set_state_attributes",
+            entity_id: this.config?.entity,
+            state: this.survey_state,
+            attributes: results,
+          })
+          .then((data) => {
+            console.log("Post Entity Data", data);
+            clearInterval(this.survey_timer);
+            let thank_you_element =
+              this.shadowRoot.querySelector(".sd-completedpage");
+            thank_you_element.innerText =
+              "Thank you for your response! Click here to return home.";
+            thank_you_element.style.cursor = "pointer";
+            thank_you_element.onclick = function () {
+              window.location.href = "/";
+            };
+          });
+      }, 500);
     });
 
     $(this.shadowRoot.getElementById("surveyElement")).Survey({
