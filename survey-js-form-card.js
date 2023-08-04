@@ -125,11 +125,11 @@ class SurveyCard extends LitElement {
       //   }
       // );
 
-      this._hass.callService("python_script", "hass_entities", {
-        action: "set_state",
-        entity_id: this.config?.state_life_cycle_entity,
-        state: "started",
-      });
+      // this._hass.callService("python_script", "hass_entities", {
+      //   action: "set_state",
+      //   entity_id: this.config?.state_life_cycle_entity,
+      //   state: "started",
+      // });
 
       // setTimeout(() => {
       // this._hass.callWS("POST", "states/" + this.config.entity, {
