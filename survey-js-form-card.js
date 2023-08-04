@@ -144,7 +144,7 @@ class SurveyCard extends LitElement {
         entity_id: this.config?.entity,
         state: "started",
         attributes: {
-          start_timer_date: countDownDate.getTime(),
+          start_timer_date: "dcafaesq",
         },
       });
       // }, 500);
