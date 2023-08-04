@@ -106,9 +106,9 @@ class SurveyCard extends LitElement {
     }
   }
 
-  startTimer(state1) {
+  startTimer(state) {
     var countDownDate;
-    if (state1 == "sent") {
+    if (state == "sent") {
       countDownDate = new Date();
       countDownDate.setMinutes(
         countDownDate.getMinutes() + this.config.expiry_time_min
@@ -117,50 +117,27 @@ class SurveyCard extends LitElement {
       //   entity_id: this.config?.state_life_cycle_entity,
       // });
 
-      // this._hass.callWS(
-      //   "POST",
-      //   "states/" + this.config?.state_life_cycle_entity,
-      //   {
-      //     state: "started",
-      //   }
-      // );
-
-      this._hass.callService("python_script", "hass_entities", {
-        action: "set_state_attributes",
-        entity_id: this.config?.state_life_cycle_entity,
-        state: "started",
-        attributes: {
-          start_timer_date: "ooo",
-        },
-      });
+      this._hass.callApi(
+        "POST",
+        "states/" + this.config?.state_life_cycle_entity,
+        {
+          state: "started",
+        }
+      );
 
       setTimeout(() => {
-        // this._hass.callWS("POST", "states/" + this.config.entity, {
-        //   state: "started",
-        //   attributes: {
-        //     start_timer_date: countDownDate.getTime(),
-        //   },
-        // });
-
-        this._hass.callService("python_script", "hass_entities", {
-          action: "set_state_attributes",
-          entity_id: this.config?.entity,
+        this._hass.callApi("POST", "states/" + this.config.entity, {
           state: "started",
           attributes: {
-            start_timer_date: "ppp",
+            start_timer_date: countDownDate.getTime(),
           },
         });
       }, 500);
-    } else if (state1 == "started") {
-      // this._hass.callWS("GET", "states/" + this.config.entity).then((data) => {
-      //   console.log("Get Entity Data", data);
-      //   countDownDate = new Date(data.attributes.start_timer_date);
-      // });
-      // countDownDate = new Date(
-      //   this._hass.states[
-      //     this.config?.state_life_cycle_entity
-      //   ].attributes.start_timer_date
-      // );
+    } else if (state == "started") {
+      this._hass.callApi("GET", "states/" + this.config.entity).then((data) => {
+        console.log("Get Entity Data", data);
+        countDownDate = new Date(data.attributes.start_timer_date);
+      });
     }
 
     var thisHassNode = this;
@@ -212,19 +189,13 @@ class SurveyCard extends LitElement {
     this.survey_state = "received";
 
     this.survey.onComplete.add((sender) => {
-      this._hass.callService("python_script", "hass_entities", {
-        action: "set_state",
-        entity_id: this.config?.state_life_cycle_entity,
-        state: this.survey_state,
-      });
-
-      // this._hass.callWS(
-      //   "POST",
-      //   "states/" + this.config?.state_life_cycle_entity,
-      //   {
-      //     state: this.survey_state,
-      //   }
-      // );
+      this._hass.callApi(
+        "POST",
+        "states/" + this.config?.state_life_cycle_entity,
+        {
+          state: this.survey_state,
+        }
+      );
 
       setTimeout(() => {
         if (this.config?.floor_plan_location) {
@@ -239,9 +210,7 @@ class SurveyCard extends LitElement {
         };
 
         this._hass
-          .callService("python_script", "hass_entities", {
-            action: "set_state_attributes",
-            entity_id: this.config?.entity,
+          .callApi("POST", "states/" + this.config.entity, {
             state: this.survey_state,
             attributes: results,
           })
