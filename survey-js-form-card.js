@@ -189,7 +189,6 @@ class SurveyCard extends LitElement {
     this.survey_state = "received";
 
     this.survey.onComplete.add((sender) => {
-
       this._hass.callApi(
         "POST",
         "states/" + this.config?.state_life_cycle_entity,
@@ -199,6 +198,11 @@ class SurveyCard extends LitElement {
       );
 
       setTimeout(() => {
+        if (this.config?.floor_plan_location) {
+          sender.data.selectedFloorPlan =
+            this._hass.states[this.config?.floor_plan_location].state;
+        }
+
         const results = {
           user_name: this._hass.user.name,
           survey_trigger: "Temp Change",
