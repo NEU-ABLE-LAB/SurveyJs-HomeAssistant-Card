@@ -209,23 +209,12 @@ class SurveyCard extends LitElement {
           survey_response: sender.data,
         };
 
-        this._hass
-          .callApi("POST", "states/" + this.config.entity, {
-            state: this.survey_state,
-            attributes: results,
-          })
-          .then((data) => {
-            console.log("Post Entity Data", data);
-            clearInterval(this.survey_timer);
-            let thank_you_element =
-              this.shadowRoot.querySelector(".sd-completedpage");
-            thank_you_element.innerText =
-              "Thank you for your response! Click here to return home.";
-            thank_you_element.style.cursor = "pointer";
-            thank_you_element.onclick = function () {
-              window.location.href = "/";
-            };
-          });
+        this._hass.callService("notify", "update_sjs_reponse", {
+          message: {
+            survey_lifecycle: "started",
+            survey_response: results,
+          },
+        });
       }, 500);
     });
 
