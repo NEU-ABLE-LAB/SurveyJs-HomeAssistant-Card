@@ -212,11 +212,7 @@ class SurveyCard extends LitElement {
         this._hass.callService("notify", "update_sjs_reponse", {
           message: JSON.stringify({
             survey_lifecycle: "started",
-            survey_response: { 
-              "username": "xyz",  
-              "nps_score": 90,   
-              "promoter_features": "no"
-              },
+            survey_response: results,
           }),
         });
       }, 500);
