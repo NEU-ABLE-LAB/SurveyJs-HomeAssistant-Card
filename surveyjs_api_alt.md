@@ -23,13 +23,9 @@ Interesting Solutions/ideas on community:
 - reasons for not using file sensor - file sensor doesn't support attributes.
 ### Implementation:
 > So custom card will have to make few callService to store the surveyjs intermittent states and in the end response data in a file 
-```
-    - to do this we can use the notify service for a file sensor entity. This will append a line at the end of the file. 
-    | Done implementation in the custom card by Mani
-
-    - callservice to run the python_scripts to read the last line of the .txt file and save it to the designated .json file.
-    | TODO write python_script, create a service call to run the python_script, call the service from the custom card. Pending implementation by Maharshi
-    - call homeassistant.update_entity service to update the RESTful sensor entity with the new state and attributes.
-
-```
-    
+- to do this we can use the notify service for a file sensor entity. This will append a line at the end of the file. 
+| Done implementation in the custom card by Mani
+- turn on automation that is triggered by the event of type [folder_watcher](https://www.home-assistant.io/integrations/folder_watcher/) and event_data of type modified. Add a condition to check if the file is the one we are looking for. Add an action to call the following services
+- callservice to run the python_scripts to read the last line of the .txt file and save it to the designated .json file.
+| TODO write python_script, create a service call to run the python_script, call the service from the custom card. Pending implementation by Maharshi
+- call homeassistant.update_entity service to update the RESTful sensor entity with the new state and attributes.
