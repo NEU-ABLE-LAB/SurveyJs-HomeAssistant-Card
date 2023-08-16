@@ -13,32 +13,33 @@ class SurveyCard extends LitElement {
   }
 
   setConfig(config) {
-    console.log("Config", this, config);
-    this.config = config;
-    this.survey = null;
-    this.survey_timer = null;
-    this.survey_state = "";
-    this.customCss = "";
-    this.noUiSliderStyles = "";
-    this.globalCss = "";
-    this.getCustomCss();
 
-    setTimeout(() => {
+      this.config = config;
+      // console.log("Config", this.config);
+      this.survey = null;
+      this.survey_timer = null;
+      this.survey_state = "";
+      this.customCss = "";
+      this.noUiSliderStyles = "";
+      this.globalCss = "";
+      this.getCustomCss();
+
+      setTimeout(() => {
       if (
-        this._hass?.states[this.config?.state_life_cycle_entity]?.state ===
+          this._hass?.states[this.config?.state_life_cycle_entity]?.state ===
           "sent" ||
-        this._hass?.states[this.config?.state_life_cycle_entity]?.state ===
+          this._hass?.states[this.config?.state_life_cycle_entity]?.state ===
           "started"
       ) {
-        this.startTimer(
+          this.startTimer(
           this._hass.states[this.config?.state_life_cycle_entity].state
-        );
+          );
       } else {
-        clearInterval(this.survey_timer);
+          clearInterval(this.survey_timer);
       //  console.log("Interval Cleared");        // : Comment in production
       }
       // console.log(this.survey_timer);           // : Comment in production
-    }, 500);
+      }, 500);
   }
 
   set hass(hass) {
@@ -127,7 +128,9 @@ class SurveyCard extends LitElement {
       // );                                                                              // : Replaced with callService
 
       this._hass.callService("input_select", "select_option", {'entity_id': this.config?.state_life_cycle_entity, 'option': 'started'});
-      this._hass.callService("timer", "start", {'entity_id': this.config?.expiry_timer.name, 'duration': this.config.expiry_timer.duration});
+      // console.log(this._hass?.states[this.config?.state_life_cycle_entity] )
+      this._hass.callService("timer", "start", { 'entity_id': this.config?.expiry_timer[0].name, 'duration': this.config.expiry_timer[0].duration });
+      // console.log(this._hass?.states[this.config?.expiry_timer.name] )
 
       // setTimeout(() => {
       //   this._hass.callApi("POST", "states/" + this.config.entity, {
@@ -138,14 +141,14 @@ class SurveyCard extends LitElement {
       //   });
 
       // }, 500);                                                                        // TODO: Replace with Hass timer and init w/callService
-    } 
+    }
     // if state is started, gets remaining time from entity and sets timer
     else if (state == "started") {
       // CONSIDER: Add a check for timer state and remaining time
       // check the timer state;
       // if timer is idle, set state to received and clear timer
       // if timer is active, get remaining time and set timer
-      
+
       // OLD CODE
       // this._hass.callApi("GET", "states/" + this.config.entity).then((data) => {
       //   // console.log("Get Entity Data", data);                                      // : Comment in production
@@ -178,11 +181,11 @@ class SurveyCard extends LitElement {
       //   thisHassNode.survey.doComplete();
       // }
 
-      if (this._hass.states[this.config?.expiry_timer.name]?.state == 'idle') {
+      if (this._hass?.states[this.config?.expiry_timer[0].name] == 'idle') {
         clearInterval(thisHassNode.survey_timer);
         thisHassNode.survey_state = "received";
         thisHassNode.survey.doComplete();
-      }     
+      }
     }, 1000);
   }
 
@@ -205,7 +208,7 @@ class SurveyCard extends LitElement {
       thisNode.pageCssLogic(options);
     });
 
-    this.survey_state = "received";
+  //   this.survey_state = "received";
 
     this.survey.onComplete.add((sender) => {
       // this._hass.callApi(
@@ -214,13 +217,7 @@ class SurveyCard extends LitElement {
       //   {
       //     state: this.survey_state,
       //   }
-      // )
-      this._hass.callService("input_select", "select_option", 
-        {
-          'entity_id': this.config?.state_life_cycle_entity,
-          'option': this.survey_state
-        }
-      );                                                                          // : Replace with callService
+      // )                                                                         // : Replace with callService
 
       // console.log("Survey Completed", sender.data);                            // : Comment in production
 
@@ -248,14 +245,15 @@ class SurveyCard extends LitElement {
         //       survey_response: results,
         //     }),
         //   }) // Replace with callService
-        this._hass.callService("input_text", "set_value", 
+        this._hass.callService("input_text", "set_value",
           {
-            "entity_id": this.config?.survey_response_entity, 
-            "value": JSON.stringify(results)}) 
+            "entity_id": this.config?.survey_response_entity,
+            "value": JSON.stringify(results)})
           .then((data) => {
             // console.log("Post Entity Data", data);                          // : Comment in production
-            // clearInterval(this.survey_timer);
-            this._hass.callService("timer", "cancel", {'entity_id': this.config?.expiry_timer.name});
+              // clearInterval(this.survey_timer);
+              // console.log(this.config?.expiry_timer[0].name)
+            this._hass.callService("timer", "cancel", {'entity_id': this.config?.expiry_timer[0].name});
             let thank_you_element =
               this.shadowRoot.querySelector(".sd-completedpage");
             thank_you_element.innerText =
@@ -264,7 +262,7 @@ class SurveyCard extends LitElement {
             thank_you_element.onclick = function () {
               window.location.href = "/";
             };
-          });                                                             // : adds a thank you page, 
+          });                                                             // : adds a thank you page,
       }, 500);
     });
 
