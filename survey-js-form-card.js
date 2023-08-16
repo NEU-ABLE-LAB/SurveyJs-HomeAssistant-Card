@@ -35,37 +35,37 @@ class SurveyCard extends LitElement {
         );
       } else {
         clearInterval(this.survey_timer);
-      //  console.log("Interval Cleared");        // TODO: Comment in production
+      //  console.log("Interval Cleared");        // : Comment in production
       }
-      // console.log(this.survey_timer);           // TODO: Comment in production
+      // console.log(this.survey_timer);           // : Comment in production
     }, 500);
   }
 
   set hass(hass) {
-    // console.log("Hass", hass);                  // TODO: Comment in production
+    // console.log("Hass", hass);                  // : Comment in production
     this._hass = hass;
   }
 
   firstUpdated() {
-    // console.log("Hi", this.config);             // TODO: Comment in production
+    // console.log("Hi", this.config);             // : Comment in production
     var thisNode = this;
     $(document).ready(function () {
-      // console.log("Jquery working");            // TODO: Comment in production
+      // console.log("Jquery working");            // : Comment in production
       $.getScript("https://unpkg.com/survey-jquery/survey.jquery.min.js").done(
         (script, textStatus) => {
-          // console.log(thisNode);                // TODO: Comment in production
+          // console.log(thisNode);                // : Comment in production
           thisNode.constructSurveyUI();
         }
       );
       $.getScript(
         "https://unpkg.com/surveyjs-widgets@1.9.90/surveyjs-widgets.min.js"
       ).done((script, textStatus) => {
-        // console.log("Survey JS Widgets loaded");  // TODO: Comment in production
+        // console.log("Survey JS Widgets loaded");  // : Comment in production
       });
       $.getScript(
         "https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.4/showdown.min.js"
       ).done((script, textStatus) => {
-        // console.log("Showdown loaded");         // TODO: Comment in production
+        // console.log("Showdown loaded");         // : Comment in production
       });
     });
   }
@@ -89,7 +89,7 @@ class SurveyCard extends LitElement {
       //   this.customCss?.default,
       //   this.noUiSliderStyles?.default,
       //   this.globalCss?.default
-      // );                                        // TODO: Comment in production
+      // );                                        // : Comment in production
 
       let prependStyle = this.shadowRoot.createElement("style");
 
@@ -125,19 +125,7 @@ class SurveyCard extends LitElement {
         }
       );                                                                              // TODO: Replace with callService
 
-      setTimeout(() => {
-        this._hass.callApi("POST", "states/" + this.config.entity, {
-          state: "started",
-          attributes: {
-            start_timer_date: countDownDate.getTime(),
-          },
-        });
-      }, 500);                                                                        // TODO: Replace with Hass timer and init w/callService
-    } else if (state == "started") {
-      this._hass.callApi("GET", "states/" + this.config.entity).then((data) => {
-        // console.log("Get Entity Data", data);                                      // TODO: Comment in production
-        countDownDate = new Date(data.attributes.start_timer_date);                   // TODO: check with Hass.state(timer) active and remaining time
-      });
+      //   // console.log("Get Entity Data", data);                                      // : Comment in production
     }
 
     var thisHassNode = this;
@@ -170,7 +158,7 @@ class SurveyCard extends LitElement {
   constructSurveyUI() {
     var thisNode = this;
     window["surveyjs-widgets"].nouislider(Survey);
-    // console.log("Script accesed", Survey, "Config", this.config, noUiSlider); // TODO: Comment in production
+    // console.log("Script accesed", Survey, "Config", this.config, noUiSlider); // : Comment in production
 
     this.survey = new Survey.Model(this.config.surveyjs_json);
     // console.log(
@@ -180,7 +168,7 @@ class SurveyCard extends LitElement {
     //   this.survey.currentPageNo
     // );                                                                         // TODO Comment in production
 
-    // console.log(this.config.surveyjs_json);                                   // TODO  Comment in production
+    // console.log(this.config.surveyjs_json);                                   //   Comment in production
 
     this.survey.onUpdateQuestionCssClasses.add(function (_, options) {
       thisNode.pageCssLogic(options);
@@ -195,7 +183,7 @@ class SurveyCard extends LitElement {
         {
           state: this.survey_state,
         }
-      );                                                                          // TODO: Replace with callService
+      // console.log("Survey Completed", sender.data);                            // : Comment in production
 
       setTimeout(() => {
         if (this.config?.floor_plan_location) {
@@ -253,11 +241,11 @@ class SurveyCard extends LitElement {
   }
 
   pageCssLogic(options) {
-    // console.log(options, "Custom CSS", options.question.getType());                 // TODO: Comment in production
+    // console.log(options, "Custom CSS", options.question.getType());                 // : Comment in production
 
     let elementsData;
     if (this.config.surveyjs_json?.elements) {
-      // console.log("Only one element");                                              // TODO: Comment in production
+      // console.log("Only one element");                                              // : Comment in production
       elementsData = this.config.surveyjs_json?.elements;
     } else {
       elementsData =
@@ -288,14 +276,14 @@ class SurveyCard extends LitElement {
         //   ele.type,
         //   this.survey.css,
         //   ele?.customCssClassDetails
-        // );                                                                       // TODO: Comment in production
+        // );                                                                       // : Comment in production
         break;
       }
     }
   }
 
   cssClassUpdation(classes, classKey, classValue, questionType) {
-    console.log(classes, classKey, classValue, questionType, "Classes");               // TODO: Comment in production
+    // console.log(classes, classKey, classValue, questionType, "Classes");               // : Comment in production
     classKey.forEach((v, i) => {
       classes[v] = classValue[i];
     });
@@ -305,7 +293,7 @@ class SurveyCard extends LitElement {
       this.survey.onTextMarkdown.add(function (survey, options) {
         //convert the markdown text to html
 
-        // console.log(options, options.html);                                            // TODO: Comment in production
+        // console.log(options, options.html);                                            // : Comment in production
 
         var str = converter.makeHtml(options.text);
         //remove root paragraphs <p></p>
