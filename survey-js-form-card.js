@@ -123,7 +123,7 @@ class SurveyCard extends LitElement {
         {
           state: "started",
         }
-      );
+      );                                                                              // TODO: Replace with callService
 
       setTimeout(() => {
         this._hass.callApi("POST", "states/" + this.config.entity, {
@@ -132,11 +132,11 @@ class SurveyCard extends LitElement {
             start_timer_date: countDownDate.getTime(),
           },
         });
-      }, 500);
+      }, 500);                                                                        // TODO: Replace with Hass timer and init w/callService
     } else if (state == "started") {
       this._hass.callApi("GET", "states/" + this.config.entity).then((data) => {
         // console.log("Get Entity Data", data);                                      // TODO: Comment in production
-        countDownDate = new Date(data.attributes.start_timer_date);
+        countDownDate = new Date(data.attributes.start_timer_date);                   // TODO: check with Hass.state(timer) active and remaining time
       });
     }
 
@@ -178,9 +178,9 @@ class SurveyCard extends LitElement {
     //   this.survey,
     //   this.survey.visiblePages,
     //   this.survey.currentPageNo
-    // );                                                                         // TODO: Comment in production
+    // );                                                                         // TODO Comment in production
 
-    // console.log(this.config.surveyjs_json);                                   // TODO: Comment in production
+    // console.log(this.config.surveyjs_json);                                   // TODO  Comment in production
 
     this.survey.onUpdateQuestionCssClasses.add(function (_, options) {
       thisNode.pageCssLogic(options);
@@ -195,7 +195,7 @@ class SurveyCard extends LitElement {
         {
           state: this.survey_state,
         }
-      );
+      );                                                                          // TODO: Replace with callService
 
       setTimeout(() => {
         if (this.config?.floor_plan_location) {
@@ -210,9 +210,11 @@ class SurveyCard extends LitElement {
         };
 
         this._hass
-          .callApi("POST", "states/" + this.config.entity, {
-            state: this.survey_state,
-            attributes: results,
+          .callService("notify", "update_sjs_reponse", {
+            message: JSON.stringify({
+              survey_lifecycle: "started",
+              survey_response: results,
+            }),
           })
           .then((data) => {
             // console.log("Post Entity Data", data);                          // TODO: Comment in production
@@ -225,7 +227,7 @@ class SurveyCard extends LitElement {
             thank_you_element.onclick = function () {
               window.location.href = "/";
             };
-          });
+          });                                                             // TDOD: adds a thank you page, 
       }, 500);
     });
 
