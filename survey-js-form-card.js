@@ -178,10 +178,11 @@ class SurveyCard extends LitElement {
       //   thisHassNode.survey.doComplete();
       // }
 
+      if (this._hass.states[this.config?.expiry_timer.name]?.state == 'idle') {
         clearInterval(thisHassNode.survey_timer);
         thisHassNode.survey_state = "received";
         thisHassNode.survey.doComplete();
-      }
+      }     
     }, 1000);
   }
 
