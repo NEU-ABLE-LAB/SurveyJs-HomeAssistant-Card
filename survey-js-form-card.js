@@ -108,6 +108,7 @@ class SurveyCard extends LitElement {
 
   startTimer(state) {
     var countDownDate;
+    // change state to started if state is sent and sets timer to duration specified in config
     if (state == "sent") {
       // countDownDate = new Date();
       // countDownDate.setMinutes(
@@ -117,14 +118,36 @@ class SurveyCard extends LitElement {
       //   entity_id: this.config?.state_life_cycle_entity,
       // });
 
-      this._hass.callApi(
-        "POST",
-        "states/" + this.config?.state_life_cycle_entity,
-        {
-          state: "started",
-        }
-      );                                                                              // TODO: Replace with callService
+      // this._hass.callApi(
+      //   "POST",
+      //   "states/" + this.config?.state_life_cycle_entity,
+      //   {
+      //     state: "started",
+      //   }
+      // );                                                                              // : Replaced with callService
 
+      this._hass.callService("input_select", "select_option", {'entity_id': this.config?.state_life_cycle_entity, 'option': 'started'});
+      this._hass.callService("timer", "start", {'entity_id': this.config?.expiry_timer.name, 'duration': this.config.expiry_timer.duration});
+
+      // setTimeout(() => {
+      //   this._hass.callApi("POST", "states/" + this.config.entity, {
+      //     state: "started",
+      //     attributes: {
+      //       start_timer_date: countDownDate.getTime(),
+      //     },
+      //   });
+
+      // }, 500);                                                                        // TODO: Replace with Hass timer and init w/callService
+    } 
+    // if state is started, gets remaining time from entity and sets timer
+    else if (state == "started") {
+      // CONSIDER: Add a check for timer state and remaining time
+      // check the timer state;
+      // if timer is idle, set state to received and clear timer
+      // if timer is active, get remaining time and set timer
+      
+      // OLD CODE
+      // this._hass.callApi("GET", "states/" + this.config.entity).then((data) => {
       //   // console.log("Get Entity Data", data);                                      // : Comment in production
       //   countDownDate = new Date(data.attributes.start_timer_date);                   // TODO: check with Hass.state(timer) active and remaining time
       // });
@@ -154,6 +177,7 @@ class SurveyCard extends LitElement {
       //   thisHassNode.survey_state = "received";
       //   thisHassNode.survey.doComplete();
       // }
+
         clearInterval(thisHassNode.survey_timer);
         thisHassNode.survey_state = "received";
         thisHassNode.survey.doComplete();
@@ -183,13 +207,26 @@ class SurveyCard extends LitElement {
     this.survey_state = "received";
 
     this.survey.onComplete.add((sender) => {
-      this._hass.callApi(
-        "POST",
-        "states/" + this.config?.state_life_cycle_entity,
+      // this._hass.callApi(
+      //   "POST",
+      //   "states/" + this.config?.state_life_cycle_entity,
+      //   {
+      //     state: this.survey_state,
+      //   }
+      // )
+      this._hass.callService("input_select", "select_option", 
         {
-          state: this.survey_state,
+          'entity_id': this.config?.state_life_cycle_entity,
+          'option': this.survey_state
         }
+      );                                                                          // : Replace with callService
+
       // console.log("Survey Completed", sender.data);                            // : Comment in production
+
+      // setter for received state; uses call service instead of call api
+      this.survey.onComplete.add((sender) => {
+        this._hass.callService("input_select", "select_option", {'entity_id': this.config?.state_life_cycle_entity, 'option': 'received'});
+      });
 
       setTimeout(() => {
         if (this.config?.floor_plan_location) {
@@ -203,13 +240,17 @@ class SurveyCard extends LitElement {
           survey_response: sender.data,
         };
 
-        this._hass
-          .callService("notify", "update_sjs_reponse", {
-            message: JSON.stringify({
-              survey_lifecycle: "started",
-              survey_response: results,
-            }),
-          })
+        // this._hass
+        //   .callService("notify", "update_sjs_reponse", {
+        //     message: JSON.stringify({
+        //       survey_lifecycle: "started",
+        //       survey_response: results,
+        //     }),
+        //   }) // Replace with callService
+        this._hass.callService("input_text", "set_value", 
+          {
+            "entity_id": this.config?.survey_response_entity, 
+            "value": JSON.stringify(results)}) 
           .then((data) => {
             // console.log("Post Entity Data", data);                          // : Comment in production
             // clearInterval(this.survey_timer);
@@ -222,7 +263,7 @@ class SurveyCard extends LitElement {
             thank_you_element.onclick = function () {
               window.location.href = "/";
             };
-          });                                                             // TDOD: adds a thank you page, 
+          });                                                             // : adds a thank you page, 
       }, 500);
     });
 
