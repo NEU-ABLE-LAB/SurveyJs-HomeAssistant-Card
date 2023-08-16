@@ -109,10 +109,10 @@ class SurveyCard extends LitElement {
   startTimer(state) {
     var countDownDate;
     if (state == "sent") {
-      countDownDate = new Date();
-      countDownDate.setMinutes(
-        countDownDate.getMinutes() + this.config.expiry_time_min
-      );
+      // countDownDate = new Date();
+      // countDownDate.setMinutes(
+      //   countDownDate.getMinutes() + this.config.expiry_time_min
+      // );
       // this._hass.callService("input_select.select_option", "started", {
       //   entity_id: this.config?.state_life_cycle_entity,
       // });
@@ -126,28 +126,34 @@ class SurveyCard extends LitElement {
       );                                                                              // TODO: Replace with callService
 
       //   // console.log("Get Entity Data", data);                                      // : Comment in production
+      //   countDownDate = new Date(data.attributes.start_timer_date);                   // TODO: check with Hass.state(timer) active and remaining time
+      // });
     }
 
     var thisHassNode = this;
 
     this.survey_timer = setInterval(function () {
-      var now = new Date().getTime();
+      // var now = new Date().getTime();
 
-      var distance = countDownDate - now;
+      // var distance = countDownDate - now;
 
-      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      var hours = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
-      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      // var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      // var hours = Math.floor(
+      //   (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      // );
+      // var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      // var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      console.log(
-        days + "d " + hours + "h " + minutes + "m " + seconds + "s ",
-        thisHassNode.survey_timer
-      );                                                                      // TODO: Comment in production
-
-      if (distance < 0) {
+      // console.log(
+      //   // days + "d " + hours + "h " + minutes + "m " + seconds + "s ",
+      //   thisHassNode.survey_timer
+      // );                                                                      // : Comment in production
+      // when timer expires, sets state to received and clears timer
+      // if (distance < 0) {
+      //   clearInterval(thisHassNode.survey_timer);
+      //   thisHassNode.survey_state = "received";
+      //   thisHassNode.survey.doComplete();
+      // }
         clearInterval(thisHassNode.survey_timer);
         thisHassNode.survey_state = "received";
         thisHassNode.survey.doComplete();
@@ -166,7 +172,7 @@ class SurveyCard extends LitElement {
     //   this.survey,
     //   this.survey.visiblePages,
     //   this.survey.currentPageNo
-    // );                                                                         // TODO Comment in production
+    // );                                                                         //  Comment in production
 
     // console.log(this.config.surveyjs_json);                                   //   Comment in production
 
@@ -205,8 +211,9 @@ class SurveyCard extends LitElement {
             }),
           })
           .then((data) => {
-            // console.log("Post Entity Data", data);                          // TODO: Comment in production
-            clearInterval(this.survey_timer);
+            // console.log("Post Entity Data", data);                          // : Comment in production
+            // clearInterval(this.survey_timer);
+            this._hass.callService("timer", "cancel", {'entity_id': this.config?.expiry_timer.name});
             let thank_you_element =
               this.shadowRoot.querySelector(".sd-completedpage");
             thank_you_element.innerText =
