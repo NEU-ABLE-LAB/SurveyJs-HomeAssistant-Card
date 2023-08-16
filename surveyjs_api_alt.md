@@ -29,3 +29,10 @@ Interesting Solutions/ideas on community:
 - callservice to run the python_scripts to read the last line of the .txt file and save it to the designated .json file.
 | TODO write python_script, create a service call to run the python_script, call the service from the custom card. Pending implementation by Maharshi
 - call homeassistant.update_entity service to update the RESTful sensor entity with the new state and attributes.
+
+
+Solution 2:
+- use HA input_text entity to store the JSON format surveyjs data in a HA file.
+- use HA service calls to post JSON response of less than 255 characters to HA input_text entity.
+- use HA service calls to maintain surveyjs lifecycle_state and associated time attr data in HA input_select(?) entity.
+- use HA service calls to start, check, finish surveyjs expiry timer in HA timer entity.
