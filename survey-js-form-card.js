@@ -64,7 +64,7 @@ class SurveyCard extends LitElement {
         // console.log("Survey JS Widgets loaded");  // : Comment in production
       });
       $.getScript(
-        "https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.4/showdown.min.js"
+        "https://unpkg.com/browse/showdown@1.9.1/dist/showdown.min.js"
       ).done((script, textStatus) => {
         // console.log("Showdown loaded");         // : Comment in production
       });
