@@ -233,9 +233,8 @@ class SurveyCard extends LitElement {
         }
 
         const results = {
-          user_name: this._hass.user.name,
-          survey_trigger: "Temp Change",
-          survey_response: sender.data,
+          response: sender.data,
+          responded_at: Date.now(),
         };
 
         // this._hass
