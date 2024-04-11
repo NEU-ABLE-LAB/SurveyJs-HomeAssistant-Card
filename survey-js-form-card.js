@@ -52,12 +52,10 @@ class SurveyCard extends LitElement {
       );
       $.getScript(
         "https://unpkg.com/surveyjs-widgets@1.9.90/surveyjs-widgets.min.js"
-      ).done((script, textStatus) => {
-      });
+      );
       $.getScript(
         "https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.4/showdown.min.js"
-      ).done((script, textStatus) => {
-      });
+      );
     });
   }
 
@@ -92,34 +90,27 @@ class SurveyCard extends LitElement {
   }
 
   startTimer(state) {
-    var countDownDate;
     // change state to started if state is sent and sets timer to duration specified in config
     if (state == "sent") {
       this._hass.callService("input_select", "select_option", {'entity_id': this.config?.state_life_cycle_entity, 'option': 'started'});
       this._hass.callService("timer", "start", { 'entity_id': this.config?.expiry_timer[0].name, 'duration': this.config.expiry_timer[0].duration });
     }
-    // if state is started, gets remaining time from entity and sets timer
-    else if (state == "started") {
-    }
 
-    var thisHassNode = this;
-
-    this.survey_timer = setInterval(function () {
-      if (thisHassNode._hass?.states[thisHassNode.config?.expiry_timer[0].name].state == 'idle') {
-        clearInterval(thisHassNode.survey_timer);
-        thisHassNode.survey.doComplete();
+    this.survey_timer = setInterval(() => {
+      if (this._hass?.states[this.config?.expiry_timer[0].name].state == 'idle') {
+        clearInterval(this.survey_timer);
+        this.survey.doComplete();
       }
     }, 1000);
   }
 
   constructSurveyUI() {
-    var thisNode = this;
     window["surveyjs-widgets"].nouislider(Survey);
 
     this.survey = new Survey.Model(this.config.surveyjs_json);
 
-    this.survey.onUpdateQuestionCssClasses.add(function (_, options) {
-      thisNode.pageCssLogic(options);
+    this.survey.onUpdateQuestionCssClasses.add((_, options) => {
+      this.pageCssLogic(options);
     });
 
     this.survey.onComplete.add((sender) => {
@@ -141,14 +132,17 @@ class SurveyCard extends LitElement {
           .then((data) => {
             this._hass.callService("input_select", "select_option", {'entity_id': this.config?.state_life_cycle_entity, 'option': 'received'});
             this._hass.callService("timer", "cancel", {'entity_id': this.config?.expiry_timer[0].name});
-            let thank_you_element =
-              this.shadowRoot.querySelector(".sd-completedpage");
-            thank_you_element.innerText =
-              "Thank you for your response! Click here to return home.";
-            thank_you_element.style.cursor = "pointer";
-            thank_you_element.onclick = function () {
-              window.location.href = "/";
-            };
+
+            // Currently below code is not required since we are hiding the UI under the 'received' survey life cycle state
+
+            // let thank_you_element =
+            //   this.shadowRoot.querySelector(".sd-completedpage");
+            // thank_you_element.innerText =
+            //   "Thank you for your response! Click here to return home.";
+            // thank_you_element.style.cursor = "pointer";
+            // thank_you_element.onclick = function () {
+            //   window.location.href = "/";
+            // };
           });                                                             // : adds a thank you page,
       }, 500);
     });
@@ -156,11 +150,6 @@ class SurveyCard extends LitElement {
     $(this.shadowRoot.getElementById("surveyElement")).Survey({
       model: this.survey,
     });
-
-    // adds click handler
-    const questions = this.survey.getAllQuestions();
-
-    const sliders = questions.filter((q) => q.getType() === "nouislider");
   }
 
   pageCssLogic(options) {
