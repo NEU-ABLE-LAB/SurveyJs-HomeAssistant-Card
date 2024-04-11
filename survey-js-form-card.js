@@ -18,7 +18,7 @@ class SurveyCard extends LitElement {
       // console.log("Config", this.config);
       this.survey = null;
       this.survey_timer = null;
-      this.survey_state = "";
+      // this.survey_state = "";
       this.customCss = "";
       this.noUiSliderStyles = "";
       this.globalCss = "";
@@ -182,9 +182,9 @@ class SurveyCard extends LitElement {
       //   thisHassNode.survey.doComplete();
       // }
 
-      if (this._hass?.states[this.config?.expiry_timer[0].name] == 'idle') {
+      if (thisHassNode._hass?.states[thisHassNode.config?.expiry_timer[0].name].state == 'idle') {
         clearInterval(thisHassNode.survey_timer);
-        thisHassNode.survey_state = "received";
+        // thisHassNode.survey_state = "received";
         thisHassNode.survey.doComplete();
       }
     }, 1000);
@@ -223,9 +223,9 @@ class SurveyCard extends LitElement {
       // console.log("Survey Completed", sender.data);                            // : Comment in production
 
       // setter for received state; uses call service instead of call api
-      this.survey.onComplete.add((sender) => {
-        this._hass.callService("input_select", "select_option", {'entity_id': this.config?.state_life_cycle_entity, 'option': 'received'});
-      });
+      // this.survey.onComplete.add((sender) => {
+
+      // });
 
       setTimeout(() => {
         if (this.config?.floor_plan_location) {
@@ -253,6 +253,7 @@ class SurveyCard extends LitElement {
             // console.log("Post Entity Data", data);                          // : Comment in production
               // clearInterval(this.survey_timer);
               // console.log(this.config?.expiry_timer[0].name)
+            this._hass.callService("input_select", "select_option", {'entity_id': this.config?.state_life_cycle_entity, 'option': 'received'});
             this._hass.callService("timer", "cancel", {'entity_id': this.config?.expiry_timer[0].name});
             let thank_you_element =
               this.shadowRoot.querySelector(".sd-completedpage");
