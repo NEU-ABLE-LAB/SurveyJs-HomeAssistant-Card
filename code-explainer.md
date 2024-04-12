@@ -49,212 +49,455 @@ In the card configuration enter:
 ```yaml
 type: conditional
 conditions:
-  - entity: input_select.survey_lifecycle
+  - entity: timer.ema_notification_timer_u1
+    state: idle
+  - entity: input_select.surveyjslc_u1
     state_not: idle
+  - entity: input_select.surveyjslc_u1
+    state_not: received
 card:
   type: custom:survey-card
-  entity: sensor.survey_js_entity
-  expiry_time_min: 1
-  customCss: ./survey-card-custom-css.js
+  survey_response_entity: input_text.surveyjsresponse_u1
+  state_life_cycle_entity: input_select.surveyjslc_u1
+  floor_plan_location: sensor.location_ema_u1
+  expiry_timer:
+    - name: timer.surveyjsexpiry_u1
+      duration: '00:03:20'
+  customCss: /local/css/survey-card-custom-css.js
+  noUiSliderStyles: /local/css/nouislider.js
+  globalCss: /local/css/global.js
   surveyjs_json:
-    title: Tstat Change EMA
+    title: Minimum Survey
     logoPosition: right
     pages:
       - name: page1
         elements:
-          - type: rating
-            customCssClassDetails:
-              rating:
-                item: rating-item
-                title: circle_icon
-            name: home_location
-            title: What room are you in?
-            isRequired: true
-            autoGenerate: false
-            rateCount: 6
-            rateValues:
-              - value: not_home
-                text: Not Home
-              - value: kitchen
-                text: Kitchen
-              - value: bedroom
-                text: Bedroom
-              - value: living_room
-                text: Living Room
-              - value: office
-                text: Office
-              - value: other
-                text: Other
-            displayMode: buttons
           - type: boolean
-            customCssClassDetails:
-              boolean:
-                item: boolean
-            name: others_home
-            visibleIf: '{home_location} <> ''not_home'' and {home_location} notempty'
-            title: Are other people home with you now?
+            name: home
+            title: Are you home right now?
             isRequired: true
-        title: Contextual
       - name: page2
         elements:
-          - type: rating
+          - type: nouislider
             customCssClassDetails:
-              rating:
-                item: rating-item
-            name: sensation
-            visibleIf: '{home_location} <> ''not_home'''
-            title: Right now, you feel
-            isRequired: true
-            autoGenerate: false
-            rateValues:
-              - value: cold
-                text: Cold
-              - value: cool
-                text: Cool
-              - value: neutral
-                text: Neutral
-              - value: warm
-                text: Warm
-              - value: hot
-                text: Hot
-            displayMode: buttons
-          - type: rating
+              nouislider:
+                item: column
+                withFrame: element-with-frame
+            title: Right now, you would prefer to be...
+            defaultValueExpression: '0'
+            hideNumber: true
+            name: p
+            step: '1'
+            inputTYpe: range
+            rangeMin: '-4'
+            rangeMax: '4'
+            pipsMode: values
+            pipsValues:
+              - -4
+              - -3
+              - -2
+              - -1
+              - 0
+              - 1
+              - 2
+              - 3
+              - 4
+            pipsText:
+              - value: -4
+                text: Much <br> Cooler
+              - value: 0
+                text: No <br> Change
+              - value: 4
+                text: Much <br> Warmer
+            tooltips: false
+          - type: nouislider
             customCssClassDetails:
-              rating:
-                item: sd-rating__item
-                title: ball_icon
-            name: preference
-            visibleIf: '{home_location} <> ''not_home'''
-            title: 'Right now, you would prefer to be:'
-            isRequired: true
-            autoGenerate: false
-            rateCount: 3
-            rateValues:
-              - value: cooler
-                text: Cooler
-              - value: no_change
-                text: No Change
-              - value: warmer
-                text: Warmer
-            displayMode: buttons
-          - type: rating
-            customCssClassDetails:
-              rating:
-                item: sd-rating__item
-            name: discomfort_length
-            visibleIf: >-
-              {home_location} <> 'not_home' and {preference} <> 'no_change' and
-              {preference} notempty
-            title: How long have you experienced thermal discomfort?
-            isRequired: true
-            autoGenerate: false
-            rateValues:
-              - value: Item 1
-                text: Just Now
-              - value: Item 2
-                text: 15min
-              - value: Item 3
-                text: 30min
-              - value: Item 4
-                text: 1h
-              - value: Item 5
-                text: 2h+
-            displayMode: buttons
-          - type: rating
-            customCssClassDetails:
-              rating:
-                item: rating-item
-            name: comfort_length
-            visibleIf: >-
-              {home_location} <> 'not_home' and {preference} = 'no_change' and
-              {preference} notempty
-            title: How long have you been comfortable?
-            isRequired: true
-            autoGenerate: false
-            rateValues:
-              - value: Item 1
-                text: Just Now
-              - value: Item 2
-                text: 15min
-              - value: Item 3
-                text: 30min
-              - value: Item 4
-                text: 1h
-              - value: Item 5
-                text: 2h+
-            displayMode: buttons
-        title: Thermal Experience
+              nouislider:
+                withFrame: element-with-frame
+            title: How strongly do you prefer this choice?
+            defaultValueExpression: '0'
+            hideNumber: true
+            name: pi
+            step: '1'
+            inputTYpe: range
+            rangeMin: '0'
+            rangeMax: '4'
+            pipsMode: values
+            pipsValues:
+              - 0
+              - 1
+              - 2
+              - 3
+              - 4
+            pipsText:
+              - value: 0
+                text: Not<br>at all
+              - value: 4
+                text: Very<br>Much
+            tooltips: false
+        visibleIf: '{home} <> false'
+        title: Preference
       - name: page3
         elements:
-          - type: rating
-            name: impact_preference
-            visibleIf: >-
-              ((({home_location} != 'not_home') and ({impact_sensation} != 'No
-              Change')) and notempty {impact_sensation})
-            title: Changing the thermostat made my thermal comfort
-            isRequired: true
-            autoGenerate: false
-            rateCount: 3
-            rateValues:
-              - Increase
-              - No Change
-              - Decrease
-            rateMin: -1
-            rateMax: 1
-            displayMode: buttons
-        title: Behavior
-      - name: page6
-        elements:
-          - type: panel
-            name: panel2
-            elements:
-              - type: image
-                name: question2
-                imageFit: cover
-                imageHeight: auto
-                imageWidth: 100%
-              - type: rating
-                name: question4
-                title: Your Thermal Comfort
-                defaultValueExpression: '"0"'
-                isRequired: true
-                rateMin: -2
-                rateMax: 2
-              - type: rating
-                name: question3
-                title: Someone Else's Thermal Comfort
-                defaultValueExpression: '"0"'
-                isRequired: true
-                rateMin: -2
-                rateMax: 2
-              - type: rating
-                name: question8
-                title: Financial Considerations
-                defaultValueExpression: '"0"'
-                isRequired: true
-                rateMin: -2
-                rateMax: 2
-              - type: rating
-                name: question7
-                title: Societal or Environmental Considerations
-                defaultValueExpression: '"0"'
-                isRequired: true
-                rateMin: -2
-                rateMax: 2
-            visibleIf: >-
-              ((({home_location} != 'not_home') and ({impact_sensation} != 'No
-              Change')) and notempty {impact_sensation})
+          - type: expression
+            name: question3
+            title: Have you changed any of the following in the past hour?
+          - type: nouislider
+            customCssClassDetails:
+              nouislider:
+                withFrame: element-with-frame
             title: >-
-              Which of the following encouraged or discouraged you from changing
-              the thermostat?
+              ![A dog](/local/img/person-simple-walk-fill-svgrepo-com.svg
+              =18x18) Activity Level
+            defaultValueExpression: '0'
+            hideNumber: true
+            name: al
+            step: '1'
+            inputTYpe: range
+            rangeMin: '-4'
+            rangeMax: '4'
+            pipsMode: values
+            pipsValues:
+              - -4
+              - -3
+              - -2
+              - -1
+              - 0
+              - 1
+              - 2
+              - 3
+              - 4
+            pipsText:
+              - value: -4
+                text: Decreased<br>
+              - value: -3
+                text: ' '
+              - value: -2
+                text: ' '
+              - value: -1
+                text: ' '
+              - value: 0
+                text: No<br>Change
+              - value: 1
+                text: ' '
+              - value: 2
+                text: ' '
+              - value: 3
+                text: ' '
+              - value: 4
+                text: Increased
+            tooltips: false
+          - type: nouislider
+            customCssClassDetails:
+              nouislider:
+                withFrame: element-with-frame
+            title: '![A dog](/local/img/shirt-svgrepo-com.svg =18x18) Clothing'
+            defaultValueExpression: '0'
+            hideNumber: true
+            name: cc
+            step: '1'
+            inputTYpe: range
+            rangeMin: '-4'
+            rangeMax: '4'
+            pipsMode: values
+            pipsValues:
+              - -4
+              - -3
+              - -2
+              - -1
+              - 0
+              - 1
+              - 2
+              - 3
+              - 4
+            pipsText:
+              - value: -4
+                text: Decreased
+              - value: -3
+                text: ' '
+              - value: -2
+                text: ' '
+              - value: -1
+                text: ' '
+              - value: 0
+                text: No<br>Change
+              - value: 1
+                text: ' '
+              - value: 2
+                text: ' '
+              - value: 3
+                text: ' '
+              - value: 4
+                text: Increased
+            tooltips: false
+        visibleIf: '{home} = true'
+        title: Behavior2
+      - name: page4
+        elements:
+          - type: expression
+            name: question3
+            title: Have you changed any of the following in the past hour?
+          - type: nouislider
+            customCssClassDetails:
+              nouislider:
+                withFrame: element-with-frame
+            title: '![A dog](/local/img/window-svgrepo-com.svg =18x18) Window'
+            defaultValueExpression: '0'
+            hideNumber: true
+            name: wi
+            step: '1'
+            inputTYpe: range
+            rangeMin: '-4'
+            rangeMax: '4'
+            pipsMode: values
+            pipsValues:
+              - -4
+              - -3
+              - -2
+              - -1
+              - 0
+              - 1
+              - 2
+              - 3
+              - 4
+            pipsText:
+              - value: -4
+                text: More<br>Closed
+              - value: -3
+                text: ' '
+              - value: -2
+                text: ' '
+              - value: -1
+                text: ' '
+              - value: 0
+                text: No<br>Change
+              - value: 1
+                text: ' '
+              - value: 2
+                text: ' '
+              - value: 3
+                text: ' '
+              - value: 4
+                text: More<br>Open
+            tooltips: false
+          - type: nouislider
+            customCssClassDetails:
+              nouislider:
+                withFrame: element-with-frame
+            title: >-
+              ![A dog](/local/img/window-shade-svgrepo-com.svg =18x18) Window
+              Shade
+            defaultValueExpression: '0'
+            name: si
+            step: '1'
+            inputTYpe: range
+            rangeMin: '-4'
+            rangeMax: '4'
+            pipsMode: values
+            pipsValues:
+              - -4
+              - -3
+              - -2
+              - -1
+              - 0
+              - 1
+              - 2
+              - 3
+              - 4
+            pipsText:
+              - value: -4
+                text: More<br>Closed
+              - value: -3
+                text: ' '
+              - value: -2
+                text: ' '
+              - value: -1
+                text: ' '
+              - value: 0
+                text: No<br>Change
+              - value: 1
+                text: ' '
+              - value: 2
+                text: ' '
+              - value: 3
+                text: ' '
+              - value: 4
+                text: More<br>Open
+            tooltips: false
+        visibleIf: '{home} = true'
+        title: Behavior3
+      - name: page3
+        elements:
+          - type: expression
+            name: question3
+            title: Have you changed any of the following in the past hour?
+          - type: nouislider
+            customCssClassDetails:
+              nouislider:
+                withFrame: element-with-frame
+            title: '![A dog](/local/img/fan-circled-svgrepo-com.svg =18x18) Fan'
+            defaultValueExpression: '0'
+            hideNumber: true
+            name: fi
+            step: '1'
+            inputTYpe: range
+            rangeMin: '-4'
+            rangeMax: '4'
+            pipsMode: values
+            pipsValues:
+              - -4
+              - -3
+              - -2
+              - -1
+              - 0
+              - 1
+              - 2
+              - 3
+              - 4
+            pipsText:
+              - value: -4
+                text: Slowed<br>Down
+              - value: -3
+                text: ' '
+              - value: -2
+                text: ' '
+              - value: -1
+                text: ' '
+              - value: 0
+                text: No<br>Change
+              - value: 1
+                text: ' '
+              - value: 2
+                text: ' '
+              - value: 3
+                text: ' '
+              - value: 4
+                text: Sped<br>Up
+            tooltips: false
+          - type: nouislider
+            customCssClassDetails:
+              nouislider:
+                withFrame: element-with-frame
+            title: >-
+              ![A dog](/local/img/air-conditioner-svgrepo-com.svg =18x18) Window
+              AC
+            defaultValueExpression: '0'
+            name: ai
+            step: '1'
+            inputTYpe: range
+            rangeMin: '-4'
+            rangeMax: '4'
+            pipsMode: values
+            pipsValues:
+              - -4
+              - -3
+              - -2
+              - -1
+              - 0
+              - 1
+              - 2
+              - 3
+              - 4
+            pipsText:
+              - value: -4
+                text: Less<br>Cool
+              - value: -3
+                text: ' '
+              - value: -2
+                text: ' '
+              - value: -1
+                text: ' '
+              - value: 0
+                text: No<br>Change
+              - value: 1
+                text: ' '
+              - value: 2
+                text: ' '
+              - value: 3
+                text: ' '
+              - value: 4
+                text: Cooler
+            tooltips: false
+          - type: nouislider
+            customCssClassDetails:
+              nouislider:
+                withFrame: element-with-frame
+            title: >-
+              ![A dog](/local/img/radiator-svgrepo-com.svg =18x18) Personal
+              Heater
+            defaultValueExpression: '0'
+            hideNumber: true
+            name: hi
+            step: '1'
+            inputTYpe: range
+            rangeMin: '-4'
+            rangeMax: '4'
+            pipsMode: values
+            pipsValues:
+              - -4
+              - -3
+              - -2
+              - -1
+              - 0
+              - 1
+              - 2
+              - 3
+              - 4
+            pipsText:
+              - value: -4
+                text: Less<br>Warm
+              - value: -3
+                text: ' '
+              - value: -2
+                text: ' '
+              - value: -1
+                text: ' '
+              - value: 0
+                text: No<br>Change
+              - value: 1
+                text: ' '
+              - value: 2
+                text: ' '
+              - value: 3
+                text: ' '
+              - value: 4
+                text: Warmer
+            tooltips: false
+        title: Behavior
+        visibleIf: '{home} = true'
+      - name: page4
+        elements:
+          - type: text
+            name: bm
+            title: What influenced you to make these changes?
+            maxLength: 125
+            visibleIf: >-
+              {al} <> '0' or {hi} <> '0' or {cc} <> '0' or {fi} <> '0' or {wi}
+              <> '0' or {si} <> '0' or {ai} <> '0'
+            isRequired: false
+        title: Motivation
+      - name: page5
+        elements:
+          - type: boolean
+            name: bc
+            title: Did you consider making any of these changes?
             isRequired: true
-        title: Behavio Motivation
+            visibleIf: '{home} = true'
+          - type: text
+            name: nbm
+            title: What influenced you NOT to make any of these changes?
+            maxLength: 125
+            isRequired: false
+            visibleIf: '{bc} = true'
+        visibleIf: >-
+          {al} = '0' and {hi} = '0' and {cc} = '0' and {fi} = '0' and {wi} = '0'
+          and {si} = '0' and {ai} = '0'
     showTitle: false
     showPageTitles: false
     showQuestionNumbers: 'off'
     questionErrorLocation: bottom
-    questionTitlePattern: numTitl
-
+    questionTitlePattern: numTitle
+    showPrevButton: true
 ```
 
 Don't forget the `custom` prefix, as you add a custom card. The type of the card
@@ -286,58 +529,48 @@ class SurveyCard extends LitElement {
   }
 
   setConfig(config) {
-    console.log("Config", this, config);
-    this.config = config;
-    this.survey = null;
-    this.survey_timer = null;
-    this.survey_state = "";
-    this.customCss = "";
-    this.noUiSliderStyles = "";
-    this.globalCss = "";
-    this.getCustomCss();
+      this.config = config;
+      this.survey = null;
+      this.survey_timer = null;
+      this.customCss = "";
+      this.noUiSliderStyles = "";
+      this.globalCss = "";
+      this.getCustomCss();
 
-    setTimeout(() => {
+      setTimeout(() => {
       if (
-        this._hass?.states["input_select.survey_lifecycle"]?.state === "sent" ||
-        this._hass?.states["input_select.survey_lifecycle"]?.state === "started"
+          this._hass?.states[this.config?.state_life_cycle_entity]?.state ===
+          "sent" ||
+          this._hass?.states[this.config?.state_life_cycle_entity]?.state ===
+          "started"
       ) {
-        this.startTimer(
-          this._hass.states["input_select.survey_lifecycle"].state
-        );
+          this.startTimer(
+          this._hass.states[this.config?.state_life_cycle_entity].state
+          );
       } else {
-        clearInterval(this.survey_timer);
-        console.log("Interval Cleared");
+          clearInterval(this.survey_timer);
       }
-      console.log(this.survey_timer);
-    }, 500);
+      }, 500);
   }
 
   set hass(hass) {
-    console.log("Hass", hass);
     this._hass = hass;
   }
 
   firstUpdated() {
-    console.log("Hi", this.config);
     var thisNode = this;
     $(document).ready(function () {
-      console.log("Jquery working");
       $.getScript("https://unpkg.com/survey-jquery/survey.jquery.min.js").done(
-        (script, textStatus) => {
-          console.log(thisNode);
+        (_script, _textStatus) => {
           thisNode.constructSurveyUI();
         }
       );
       $.getScript(
         "https://unpkg.com/surveyjs-widgets@1.9.90/surveyjs-widgets.min.js"
-      ).done((script, textStatus) => {
-        console.log("Survey JS Widgets loaded");
-      });
+      );
       $.getScript(
         "https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.4/showdown.min.js"
-      ).done((script, textStatus) => {
-        console.log("Showdown loaded");
-      });
+      );
     });
   }
 
@@ -356,12 +589,6 @@ class SurveyCard extends LitElement {
         this.config?.globalCss + "?" + Math.random()
       );
 
-      console.log(
-        this.customCss?.default,
-        this.noUiSliderStyles?.default,
-        this.globalCss?.default
-      );
-
       let prependStyle = this.shadowRoot.createElement("style");
 
       let appendStyle = this.shadowRoot.createElement("style");
@@ -378,134 +605,71 @@ class SurveyCard extends LitElement {
   }
 
   startTimer(state) {
-    var countDownDate;
+    // change state to started if state is sent and sets timer to duration specified in config
     if (state == "sent") {
-      countDownDate = new Date();
-      countDownDate.setMinutes(
-        countDownDate.getMinutes() + this.config.expiry_time_min
-      );
-      // this._hass.callService("input_select.select_option", "started", {
-      //   entity_id: "input_select.survey_lifecycle",
-      // });
-
-      this._hass.callApi("POST", "states/input_select.survey_lifecycle", {
-        state: "started",
-      });
-
-      setTimeout(() => {
-        this._hass.callApi("POST", "states/" + this.config.entity, {
-          state: "started",
-          attributes: {
-            start_timer_date: countDownDate.getTime(),
-          },
-        });
-      }, 500);
-    } else if (state == "started") {
-      this._hass.callApi("GET", "states/" + this.config.entity).then((data) => {
-        console.log("Get Entity Data", data);
-        countDownDate = new Date(data.attributes.start_timer_date);
-      });
+      this._hass.callService("input_select", "select_option", {'entity_id': this.config?.state_life_cycle_entity, 'option': 'started'});
+      this._hass.callService("timer", "start", { 'entity_id': this.config?.expiry_timer[0].name, 'duration': this.config.expiry_timer[0].duration });
     }
 
-    var thisHassNode = this;
-
-    this.survey_timer = setInterval(function () {
-      var now = new Date().getTime();
-
-      var distance = countDownDate - now;
-
-      if (distance < 0) {
-        clearInterval(thisHassNode.survey_timer);
-        thisHassNode.survey_state = "received";
-        thisHassNode.survey.doComplete();
+    this.survey_timer = setInterval(() => {
+      if (this._hass?.states[this.config?.expiry_timer[0].name].state == 'idle') {
+        clearInterval(this.survey_timer);
+        this.survey.doComplete();
       }
     }, 1000);
   }
 
   constructSurveyUI() {
-    var thisNode = this;
     window["surveyjs-widgets"].nouislider(Survey);
-    console.log("Script accesed", Survey, "Config", this.config, noUiSlider);
 
     this.survey = new Survey.Model(this.config.surveyjs_json);
-    console.log(
-      "Survey Model",
-      this.survey,
-      this.survey.visiblePages,
-      this.survey.currentPageNo
-    );
 
-    console.log(this.config.surveyjs_json);
-
-    this.survey.onUpdateQuestionCssClasses.add(function (_, options) {
-      thisNode.pageCssLogic(options);
+    this.survey.onUpdateQuestionCssClasses.add((_, options) => {
+      this.pageCssLogic(options);
     });
 
-    this.survey_state = "received";
-
     this.survey.onComplete.add((sender) => {
-      const results = {
-        user_name: this._hass.user.name,
-        survey_trigger: "Temp Change",
-        survey_response: sender.data,
-      };
+      setTimeout(() => {
+        if (this.config?.floor_plan_location) {
+          sender.data.selectedFloorPlan =
+            this._hass.states[this.config?.floor_plan_location]?.state;
+        }
 
-      this._hass
-        .callApi("POST", "states/" + this.config.entity, {
-          state: this.survey_state,
-          attributes: results,
-        })
-        .then((data) => {
-          console.log("Post Entity Data", data);
-          clearInterval(this.survey_timer);
-          let thank_you_element =
-            this.shadowRoot.querySelector(".sd-completedpage");
-          thank_you_element.innerText =
-            "Thank you for your response! Click here to return home.";
-          thank_you_element.style.cursor = "pointer";
-          thank_you_element.onclick = function () {
-            window.location.href = "/";
-          };
-          setTimeout(() => {
-            // this._hass.callService("input_select.select_option", "idle", {
-            //   entity_id: "input_select.survey_lifecycle",
-            // });
-            // this._hass.callApi("POST", "states/input_select.survey_lifecycle", {
-            //   state: "idle",
-            // });
-            window.location.href = "/";
-          }, 1000);
-        });
+        const results = {
+          response: sender.data,
+          responded_at: Date.now(),
+        };
+
+        this._hass.callService("input_text", "set_value",
+          {
+            "entity_id": this.config?.survey_response_entity,
+            "value": JSON.stringify(results)})
+          .then((_data) => {
+            this._hass.callService("input_select", "select_option", {'entity_id': this.config?.state_life_cycle_entity, 'option': 'received'});
+            this._hass.callService("timer", "cancel", {'entity_id': this.config?.expiry_timer[0].name});
+
+            // Currently below code is not required since we are hiding the UI under the 'received' survey life cycle state
+
+            // let thank_you_element =
+            //   this.shadowRoot.querySelector(".sd-completedpage");
+            // thank_you_element.innerText =
+            //   "Thank you for your response! Click here to return home.";
+            // thank_you_element.style.cursor = "pointer";
+            // thank_you_element.onclick = function () {
+            //   window.location.href = "/";
+            // };
+          });                                                             // : adds a thank you page,
+      }, 500);
     });
 
     $(this.shadowRoot.getElementById("surveyElement")).Survey({
       model: this.survey,
     });
-    
-    // adds click handler 
-    const questions = this.survey.getAllQuestions();
-    
-    const sliders = questions.filter(q => q.getType() === 'nouislider');
-    
-    
-    sliders.forEach(function(slider) {
-      sliderElem = slider.noUislider
-      sliderElem.on('start', (values, handle, unencoded, tap, positions, noUiSlider) => {
-        let handleElem = document.querySelectorAll("div.noUi-handle[data-handle='" + handle + "']")[0];
-        let currentClass = handleElem.className;
-        let updateClass = currentClass + '-color-change'
-        handleElem.classList.add(updateClass);
-      });
-      
-    });
   }
 
   pageCssLogic(options) {
-    console.log(options, "Custom CSS", options.question.getType());
-
     let elementsData;
     if (this.config.surveyjs_json?.elements) {
-      console.log("Only one element");
       elementsData = this.config.surveyjs_json?.elements;
     } else {
       elementsData =
@@ -517,8 +681,6 @@ class SurveyCard extends LitElement {
         options.question.fullTitle == ele.title &&
         ele?.customCssClassDetails
       ) {
-        // this.survey.css = ele?.customCssClassDetails;
-
         const classes = options.cssClasses;
         const classKey = Object.keys(
           Object.values(ele?.customCssClassDetails)[0]
@@ -528,33 +690,20 @@ class SurveyCard extends LitElement {
         );
 
         this.cssClassUpdation(classes, classKey, classValue, ele.type);
-
-        // classes[classKey] = classValue;
-
-        console.log(
-          "Available",
-          ele.type,
-          this.survey.css,
-          ele?.customCssClassDetails
-        );
         break;
       }
     }
   }
 
-  cssClassUpdation(classes, classKey, classValue, questionType) {
-    console.log(classes, classKey, classValue, questionType, "Classes");
+  cssClassUpdation(classes, classKey, classValue, _questionType) {
     classKey.forEach((v, i) => {
       classes[v] = classValue[i];
     });
 
     setTimeout(() => {
       var converter = new showdown.Converter();
-      this.survey.onTextMarkdown.add(function (survey, options) {
+      this.survey.onTextMarkdown.add(function (_survey, options) {
         //convert the markdown text to html
-
-        console.log(options, options.html);
-
         var str = converter.makeHtml(options.text);
         //remove root paragraphs <p></p>
         str = str.substring(3);
@@ -588,12 +737,12 @@ customElements.define("survey-card", SurveyCard);
 We need import below mentioned packages [Lit & JQuery] initially.
 
 ```js
-import { LitElement, html,
+import {
+  LitElement,
+  html,
 } from "https://unpkg.com/lit-element@2.0.1/lit-element.js?module";
 import "https://unpkg.com/nouislider/dist/nouislider.min.js";
 import "https://unpkg.com/jquery";
-import { nouisliderStyles } from "./css/nouislider.js";
-import { globalStyles } from "./css/global.js";
 ```
 
 ## Functions
@@ -619,32 +768,33 @@ b) Initialize variables
 d) Config setters [Similar to general constructor]
 
 - Initializing few variables
-- API call to get entity details
+- Dynamically importing custom css files and appending them to the shadow root
+- Start timer or clear timer interval based on the current state of the life cycle entity
 
 ```js
   setConfig(config) {
-    console.log("Config", this, config);
-    this.config = config;
-    this.survey = null;
-    this.survey_timer = null;
-    this.survey_state = "";
-    this.customCss = "";
-    this.getCustomCss();
+      this.config = config;
+      this.survey = null;
+      this.survey_timer = null;
+      this.customCss = "";
+      this.noUiSliderStyles = "";
+      this.globalCss = "";
+      this.getCustomCss();
 
-    setTimeout(() => {
+      setTimeout(() => {
       if (
-        this._hass?.states["input_select.survey_lifecycle"]?.state === "sent" ||
-        this._hass?.states["input_select.survey_lifecycle"]?.state === "started"
+          this._hass?.states[this.config?.state_life_cycle_entity]?.state ===
+          "sent" ||
+          this._hass?.states[this.config?.state_life_cycle_entity]?.state ===
+          "started"
       ) {
-        this.startTimer(
-          this._hass.states["input_select.survey_lifecycle"].state
-        );
+          this.startTimer(
+          this._hass.states[this.config?.state_life_cycle_entity].state
+          );
       } else {
-        clearInterval(this.survey_timer);
-        console.log("Interval Cleared");
+          clearInterval(this.survey_timer);
       }
-      console.log(this.survey_timer);
-    }, 500);
+      }, 500);
   }
 ```
 
@@ -652,32 +802,29 @@ e) Hass setter
 
 ```js
   set hass(hass) {
-    console.log("Hass", hass);
     this._hass = hass;
   }
 ```
 
 f) First updated [the official documentation](https://lit.dev/docs/v1/components/lifecycle/#firstupdated)
 
-We are importing the survey jquery and widgets package here rather than at the beginning since these cdn packages are asynchronous and we need to ensure that jquery is loaded first before importing surveyjs jquery and widgets.
+We are importing the survey jquery, widgets and showdown package here rather than at the beginning since these cdn packages are asynchronous and we need to ensure that jquery is loaded first before importing surveyjs jquery, widgets and showdown.
 
 ```js
   firstUpdated() {
-    console.log("Hi", this.config);
     var thisNode = this;
     $(document).ready(function () {
-      console.log("Jquery working");
       $.getScript("https://unpkg.com/survey-jquery/survey.jquery.min.js").done(
-        (script, textStatus) => {
-          console.log(thisNode);
+        (_script, _textStatus) => {
           thisNode.constructSurveyUI();
         }
       );
       $.getScript(
         "https://unpkg.com/surveyjs-widgets@1.9.90/surveyjs-widgets.min.js"
-      ).done((script, textStatus) => {
-        console.log("Survey JS Widgets loaded");
-      });
+      );
+      $.getScript(
+        "https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.4/showdown.min.js"
+      );
     });
   }
 ```
@@ -686,59 +833,46 @@ g) Constructing SurveyJs UI [the official documentation](https://surveyjs.io/for
 
 ```js
   constructSurveyUI() {
-    var thisNode = this;
     window["surveyjs-widgets"].nouislider(Survey);
-    console.log("Script accesed", Survey, "Config", this.config, noUiSlider);
 
     this.survey = new Survey.Model(this.config.surveyjs_json);
-    console.log(
-      "Survey Model",
-      this.survey,
-      this.survey.visiblePages,
-      this.survey.currentPageNo
-    );
 
-    console.log(this.config.surveyjs_json);
-
-    this.survey.onUpdateQuestionCssClasses.add(function (_, options) {
-      thisNode.pageCssLogic(options);
+    this.survey.onUpdateQuestionCssClasses.add((_, options) => {
+      this.pageCssLogic(options);
     });
 
-    this.survey_state = "received";
-
     this.survey.onComplete.add((sender) => {
-      const results = {
-        user_name: this._hass.user.name,
-        survey_trigger: "Temp Change",
-        survey_response: sender.data,
-      };
+      setTimeout(() => {
+        if (this.config?.floor_plan_location) {
+          sender.data.selectedFloorPlan =
+            this._hass.states[this.config?.floor_plan_location]?.state;
+        }
 
-      this._hass
-        .callApi("POST", "states/" + this.config.entity, {
-          state: this.survey_state,
-          attributes: results,
-        })
-        .then((data) => {
-          console.log("Post Entity Data", data);
-          clearInterval(this.survey_timer);
-          let thank_you_element =
-            this.shadowRoot.querySelector(".sd-completedpage");
-          thank_you_element.innerText =
-            "Thank you for your response! Click here to return home.";
-          thank_you_element.style.cursor = "pointer";
-          thank_you_element.onclick = function () {
-            window.location.href = "/";
-          };
-          setTimeout(() => {
-            // this._hass.callService("input_select.select_option", "idle", {
-            //   entity_id: "input_select.survey_lifecycle",
-            // });
-            // this._hass.callApi("POST", "states/input_select.survey_lifecycle", {
-            //   state: "idle",
-            // });
-            window.location.href = "/";
-          }, 2000);
-        });
+        const results = {
+          response: sender.data,
+          responded_at: Date.now(),
+        };
+
+        this._hass.callService("input_text", "set_value",
+          {
+            "entity_id": this.config?.survey_response_entity,
+            "value": JSON.stringify(results)})
+          .then((_data) => {
+            this._hass.callService("input_select", "select_option", {'entity_id': this.config?.state_life_cycle_entity, 'option': 'received'});
+            this._hass.callService("timer", "cancel", {'entity_id': this.config?.expiry_timer[0].name});
+
+            // Currently below code is not required since we are hiding the UI under the 'received' survey life cycle state
+
+            // let thank_you_element =
+            //   this.shadowRoot.querySelector(".sd-completedpage");
+            // thank_you_element.innerText =
+            //   "Thank you for your response! Click here to return home.";
+            // thank_you_element.style.cursor = "pointer";
+            // thank_you_element.onclick = function () {
+            //   window.location.href = "/";
+            // };
+          });                                                             // : adds a thank you page,
+      }, 500);
     });
 
     $(this.shadowRoot.getElementById("surveyElement")).Survey({
@@ -749,50 +883,20 @@ g) Constructing SurveyJs UI [the official documentation](https://surveyjs.io/for
 
 h) Timer logic
 
-We are utilizing a countdown timer so that the user can submit their response before the timer expires.
+We are utilizing a Timer helper to start the timer and also auto submitting the survey if timer expires
 
 ```js
   startTimer(state) {
-    var countDownDate;
+    // change state to started if state is sent and sets timer to duration specified in config
     if (state == "sent") {
-      countDownDate = new Date();
-      countDownDate.setMinutes(
-        countDownDate.getMinutes() + this.config.expiry_time_min
-      );
-      // this._hass.callService("input_select.select_option", "started", {
-      //   entity_id: "input_select.survey_lifecycle",
-      // });
-
-      this._hass.callApi("POST", "states/input_select.survey_lifecycle", {
-        state: "started",
-      });
-
-      setTimeout(() => {
-        this._hass.callApi("POST", "states/" + this.config.entity, {
-          state: "started",
-          attributes: {
-            start_timer_date: countDownDate.getTime(),
-          },
-        });
-      }, 500);
-    } else if (state == "started") {
-      this._hass.callApi("GET", "states/" + this.config.entity).then((data) => {
-        console.log("Get Entity Data", data);
-        countDownDate = new Date(data.attributes.start_timer_date);
-      });
+      this._hass.callService("input_select", "select_option", {'entity_id': this.config?.state_life_cycle_entity, 'option': 'started'});
+      this._hass.callService("timer", "start", { 'entity_id': this.config?.expiry_timer[0].name, 'duration': this.config.expiry_timer[0].duration });
     }
 
-    var thisHassNode = this;
-
-    this.survey_timer = setInterval(function () {
-      var now = new Date().getTime();
-
-      var distance = countDownDate - now;
-
-      if (distance < 0) {
-        clearInterval(thisHassNode.survey_timer);
-        thisHassNode.survey_state = "received";
-        thisHassNode.survey.doComplete();
+    this.survey_timer = setInterval(() => {
+      if (this._hass?.states[this.config?.expiry_timer[0].name].state == 'idle') {
+        clearInterval(this.survey_timer);
+        this.survey.doComplete();
       }
     }, 1000);
   }
@@ -802,114 +906,126 @@ i) Custom css and icon
 
 Custom css file content: 
 
-![CustomCss](img/CustomCss.png)
+![CustomCss](img/custom-styles.png)
 
-Whatever name will be given to the custom css file, same name should be declared in the home assistant configuration editor like below:
+Declare customCss variable in the home assistant configuration editor like below:
 
-![CustomCssConfig](img/CustomCssConfig.png)
+![CustomCssConfig](img/card-config.png)
 
 Need to declare a property name called customCssClassDetails at every question level in the configurations. 
  
 Follow the below syntax:
 
 ```yaml
-elements: 
-
-          - type: rating 
-
-            customCssClassDetails: 
-
-              rating: 
-
-                item: rating-item 
-
-            name: home_location 
-
-            title: What room are you in? 
-
-            isRequired: true 
-
-            autoGenerate: false 
-
-            rateCount: 6 
-
-          - type: boolean 
-
-            customCssClassDetails: 
-
-              boolean: 
-
-                item: boolean 
-
-            name: others_home 
-
-            visibleIf: '{home_location} <> ''not_home'' and {home_location} notempty' 
-
-            title: Are other people home with you now? 
-
-            isRequired: true 
-
-        title: Contextual 
+        elements:
+          - type: nouislider
+            customCssClassDetails:
+              nouislider:
+                item: column
+                withFrame: element-with-frame
+            title: Right now, you would prefer to be...
+            defaultValueExpression: '0'
+            hideNumber: true
+            name: p
+            step: '1'
+            inputTYpe: range
+            rangeMin: '-4'
+            rangeMax: '4'
+            pipsMode: values
+            pipsValues:
+              - -4
+              - -3
+              - -2
+              - -1
+              - 0
+              - 1
+              - 2
+              - 3
+              - 4
+            pipsText:
+              - value: -4
+                text: Much <br> Cooler
+              - value: 0
+                text: No <br> Change
+              - value: 4
+                text: Much <br> Warmer
+            tooltips: false
+          - type: nouislider
+            customCssClassDetails:
+              nouislider:
+                withFrame: element-with-frame
+            title: How strongly do you prefer this choice?
+            defaultValueExpression: '0'
+            hideNumber: true
+            name: pi
+            step: '1'
+            inputTYpe: range
+            rangeMin: '0'
+            rangeMax: '4'
+            pipsMode: values
+            pipsValues:
+              - 0
+              - 1
+              - 2
+              - 3
+              - 4
+            pipsText:
+              - value: 0
+                text: Not<br>at all
+              - value: 4
+                text: Very<br>Much
+            tooltips: false
+        visibleIf: '{home} <> false'
+        title: Preference
 ```
 
 In the above code structure, syntax for the customCssClassDetails is as follows:
 
 YAML Format 
 
-        customCssClassDetails: 
-          rating: 
-            item: rating-item 
+    customCssClassDetails:
+      nouislider:
+        withFrame: element-with-frame
 
 Or
 
 JSON Format 
 
 customCssClassDetails { 
-      rating: { 
-      item: rating-item   
+    nouislider: { 
+      withFrame: element-with-frame
     } 
 } 
 
 Explanation: 
  
-rating: {  -->  Question type 
+nouislider: {  -->  Question type 
 
 } 
 
-item: rating-item --> class key : new css class name  
+withFrame: element-with-frame --> class key : new css class name  
  
 To use the original css class name just replace the new one with the original css class name. 
  
 
 customCssClassDetails { 
-      rating: { 
-      item: sd-rating__item  
+      nouislider: { 
+      withFrame: sd-element--with-frame  
     } 
 }s
 
 Global Css Usage:
 
-![CssFolder](img/CssFolder.png)
+![CssFolder](img/css-folder.png)
 
 As in the above screenshot, you can declare the global and module level css javascript files in the css folder. 
-
-Custom icons: 
  
-Define the custom icon css classes in the custom css js file like below:
-
-![CustomIcon](img/CustomIcon.png)
-
-And declare the icon css accordingly at a question level
-
-![CustomIconConfig](img/CustomIconConfig.png)
+Custom css code logic:
 
 ```js
   pageCssLogic(options) {
-    console.log(options, "Custom CSS", options.question.getType());
-
     let elementsData;
     if (this.config.surveyjs_json?.elements) {
-      console.log("Only one element");
       elementsData = this.config.surveyjs_json?.elements;
     } else {
       elementsData =
@@ -921,8 +1037,6 @@ And declare the icon css accordingly at a question level
         options.question.fullTitle == ele.title &&
         ele?.customCssClassDetails
       ) {
-        // this.survey.css = ele?.customCssClassDetails;
-
         const classes = options.cssClasses;
         const classKey = Object.keys(
           Object.values(ele?.customCssClassDetails)[0]
@@ -932,33 +1046,38 @@ And declare the icon css accordingly at a question level
         );
 
         this.cssClassUpdation(classes, classKey, classValue, ele.type);
-
-        // classes[classKey] = classValue;
-
-        console.log("Available", ele.type, this.survey.css, ele?.customCssClassDetails);
         break;
       }
     }
   }
 ```
 
-j) Entities
+j) Entities & Helpers
 
-SurveyJs card totally depends on two entities:
+SurveyJs card totally depends on 1 entity and 3 helpers:
 
 1) Sensor: [`Documentation 1`](https://www.home-assistant.io/integrations/sensor/) & [`Documentation 2`](https://developers.home-assistant.io/docs/core/entity/sensor/)
-    * Sensor entity is used to store surveyjs form data as well as status cycles such as idle, sent, initiated, and received.
+    * Sensor entity is used to store floor plan location
 2) input_select: [`Documentation`](https://www.home-assistant.io/integrations/input_select/)
-    * Input select entity is used to monitor surveyjs lifecycle state changes; anytime the state of the Input select entity changes, the same state change is triggered in the surveyjs sensor entity.
+    * Input select helper is used to monitor surveyjs lifecycle state changes; anytime the state of the Input select entity changes, the same state change is triggered in the surveyjs sensor entity.
+3) input_text: [`Documentation`](https://www.home-assistant.io/integrations/input_text/)
+    * TBD
+4) timer: [`Documentation`] (https://www.home-assistant.io/integrations/timer/)
+    * TBD
 
 k) UI render
 
 ```js
   render() {
-    return html` 
-      <link rel="stylesheet" href="https://unpkg.com/survey-jquery@1.9.84/defaultV2.min.css"/>
-      <link rel="stylesheet"
-        href="https://unpkg.com/nouislider/dist/nouislider.min.css"/>
+    return html`
+      <link
+        rel="stylesheet"
+        href="https://unpkg.com/survey-jquery@1.9.84/defaultV2.min.css"
+      />
+      <link
+        rel="stylesheet"
+        href="https://unpkg.com/nouislider/dist/nouislider.min.css"
+      />
       <div id="surveyElement"></div>
     `;
   }
@@ -969,18 +1088,33 @@ l) CSS
 Use the custom imported nouislider and global variables to load css and using getCustomCss function, custom css can be applied to the DOM.
 
 ```js
-  static get styles() {
-    console.log(this.config);
-    return [nouisliderStyles, globalStyles];
-  }
-  
-    async getCustomCss() {
+  async getCustomCss() {
     const customCss = this.config?.customCss;
-    if (customCss) {
-      this.customCss = await import(this.config?.customCss);
-      let style = this.shadowRoot.createElement("style");
-      style.innerHTML = this.customCss?.default;
-      this.shadowRoot.prepend(style);
+    const noUiSliderStyles = this.config?.noUiSliderStyles;
+    const globalCss = this.config?.globalCss;
+    if (customCss && noUiSliderStyles && globalCss) {
+      this.customCss = await import(
+        this.config?.customCss + "?" + Math.random()
+      );
+      this.noUiSliderStyles = await import(
+        this.config?.noUiSliderStyles + "?" + Math.random()
+      );
+      this.globalCss = await import(
+        this.config?.globalCss + "?" + Math.random()
+      );
+
+      let prependStyle = this.shadowRoot.createElement("style");
+
+      let appendStyle = this.shadowRoot.createElement("style");
+
+      prependStyle.innerHTML = this.customCss?.default;
+
+      this.shadowRoot.prepend(prependStyle);
+
+      appendStyle.innerHTML =
+        this.noUiSliderStyles?.default + " " + this.globalCss?.default;
+
+      this.shadowRoot.append(appendStyle);
     }
   }
 ```
@@ -992,17 +1126,12 @@ Firstly import the showdown package
 ```js
       $.getScript(
         "https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.4/showdown.min.js"
-      ).done((script, textStatus) => {
-        console.log("Showdown loaded");
-      });
+      );
       
     setTimeout(() => {
       var converter = new showdown.Converter();
-      this.survey.onTextMarkdown.add(function (survey, options) {
+      this.survey.onTextMarkdown.add(function (_survey, options) {
         //convert the markdown text to html
-
-        console.log(options, options.html);
-
         var str = converter.makeHtml(options.text);
         //remove root paragraphs <p></p>
         str = str.substring(3);
@@ -1017,6 +1146,8 @@ Secondly, apply markdown and image path beside any text
 
 title: ![A dog](/local/img/thermometer-svgrepo-com.svg =18x18) What room are you in?
 
+![Markdown](img/markdown.png)
+
 m) Page cache removal
 
 When new modifications are posted to the HACS github repository, the old changes are not reflected by removing the cached page.
@@ -1024,7 +1155,7 @@ When new modifications are posted to the HACS github repository, the old changes
  Below is the code to remove page cache
  
  ```js
-       this.customCss = await import(
+      this.customCss = await import(
         this.config?.customCss + "?" + Math.random()
       );
       this.noUiSliderStyles = await import(

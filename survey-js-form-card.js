@@ -13,7 +13,6 @@ class SurveyCard extends LitElement {
   }
 
   setConfig(config) {
-
       this.config = config;
       this.survey = null;
       this.survey_timer = null;
@@ -46,7 +45,7 @@ class SurveyCard extends LitElement {
     var thisNode = this;
     $(document).ready(function () {
       $.getScript("https://unpkg.com/survey-jquery/survey.jquery.min.js").done(
-        (script, textStatus) => {
+        (_script, _textStatus) => {
           thisNode.constructSurveyUI();
         }
       );
@@ -129,7 +128,7 @@ class SurveyCard extends LitElement {
           {
             "entity_id": this.config?.survey_response_entity,
             "value": JSON.stringify(results)})
-          .then((data) => {
+          .then((_data) => {
             this._hass.callService("input_select", "select_option", {'entity_id': this.config?.state_life_cycle_entity, 'option': 'received'});
             this._hass.callService("timer", "cancel", {'entity_id': this.config?.expiry_timer[0].name});
 
@@ -153,7 +152,6 @@ class SurveyCard extends LitElement {
   }
 
   pageCssLogic(options) {
-
     let elementsData;
     if (this.config.surveyjs_json?.elements) {
       elementsData = this.config.surveyjs_json?.elements;
@@ -181,14 +179,14 @@ class SurveyCard extends LitElement {
     }
   }
 
-  cssClassUpdation(classes, classKey, classValue, questionType) {
+  cssClassUpdation(classes, classKey, classValue, _questionType) {
     classKey.forEach((v, i) => {
       classes[v] = classValue[i];
     });
 
     setTimeout(() => {
       var converter = new showdown.Converter();
-      this.survey.onTextMarkdown.add(function (survey, options) {
+      this.survey.onTextMarkdown.add(function (_survey, options) {
         //convert the markdown text to html
         var str = converter.makeHtml(options.text);
         //remove root paragraphs <p></p>
