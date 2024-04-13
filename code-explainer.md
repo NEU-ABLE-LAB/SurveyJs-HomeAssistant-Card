@@ -1012,7 +1012,7 @@ customCssClassDetails {
       nouislider: { 
       withFrame: sd-element--with-frame  
     } 
-}s
+}
 
 Global Css Usage:
 
