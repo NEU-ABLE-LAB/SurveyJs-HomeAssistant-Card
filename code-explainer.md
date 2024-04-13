@@ -1165,3 +1165,19 @@ When new modifications are posted to the HACS github repository, the old changes
         this.config?.globalCss + "?" + Math.random()
       );
  ```
+
+ ## Homeassistant DB:
+
+ To check the stored data we can also check it in the SQL IDE's by importing the home-assistant_v2.db file
+
+ Query 1: 
+
+ SELECT *  FROM states LEFT JOIN states_meta ON (states.metadata_id=states_meta.metadata_id);
+
+ ![Query 1](img/query_1.png)
+
+ Query 2:  
+ 
+SELECT *  FROM states LEFT JOIN states_meta ON (states.metadata_id=states_meta.metadata_id) WHERE states_meta.entity_id = 'input_text.surveyjsresponse_u1';
+
+ ![Query 2](img/query_2.png)
