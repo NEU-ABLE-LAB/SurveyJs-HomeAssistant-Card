@@ -32,9 +32,15 @@ Go to ***Settings*** > ***Dashboard***. Click the three dots in the upper right
 hand corner to open ***Resources***. Click ***ADD RESOURCE*** in the lower right
 hand corner.
 
+`Development`
 As the URL enter `/local/survey-js-form-card.js`. Choose ***JavaScript Module*** and submit.
 
-![adding as resource](img/adding-as-resource.png)
+![adding as resource](img/adding-as-resource_dev.png)
+
+`Production`
+As the URL enter `/hacsfiles/SurveyJs-HomeAssistant-Card/survey-js-form-card.js?hacstag=66035578447`. Choose ***JavaScript Module*** and submit.
+
+![adding as resource](img/adding-as-resource_prod.png)
 
 ### Using the Card
 
@@ -140,10 +146,10 @@ SurveyJs card totally depends on 1 entity and 3 helpers:
     * Input select helper is used to monitor surveyjs lifecycle state changes; anytime the state of the Input select entity changes, the same state change is triggered in the surveyjs sensor entity.
 3) input_text: [`Documentation`](https://www.home-assistant.io/integrations/input_text/)
     * Input text helper is used to store surveyjs form response.
-4) timer: [`Documentation`] (https://www.home-assistant.io/integrations/timer/)
+4) timer: [`Documentation`](https://www.home-assistant.io/integrations/timer/)
     * Timer helper is used for two purposes in our project, one is for countdown timer for surveyjs form submission and another one is for notification timer
 
-Note: Reason to use helper functions instead of sensor entity for all purposes is using sensor entity state changes are not permanent and data is not persisted in the homeassistant DB.
+Note: The reason for using helper functions instead of sensor entities for all purposes is that state changes with sensor entities are not permanent and data is not saved in the homeassistant database.
 
 Declare entities and helpers in the homeassistant card configuration editor like in the below image:
 
