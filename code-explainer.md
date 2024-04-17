@@ -30,12 +30,12 @@ Go to ***Settings*** > ***Dashboard***. Click the three dots in the upper right
 hand corner to open ***Resources***. Click ***ADD RESOURCE*** in the lower right
 hand corner.
 
-`Development`
+##### Development
 As the URL enter `/local/survey-js-form-card.js`. Choose ***JavaScript Module*** and submit.
 
 ![adding as resource](img/adding-as-resource_dev.png)
 
-`Production`
+##### Production
 As the URL enter `/hacsfiles/SurveyJs-HomeAssistant-Card/survey-js-form-card.js?hacstag=66035578447`. Choose ***JavaScript Module*** and submit.
 
 ![adding as resource](img/adding-as-resource_prod.png)
