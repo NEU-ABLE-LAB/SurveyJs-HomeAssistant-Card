@@ -1,7 +1,5 @@
 ## The Card Code
 
-## Test TODO
-
 Find the code in the file named `survey-js-form-card.js` alongside with this README.
 
 ### A custom element
