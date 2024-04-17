@@ -1,3 +1,4 @@
+// We need import below mentioned packages [Lit & JQuery] initially.
 import {
   LitElement,
   html,
@@ -5,14 +6,18 @@ import {
 import "https://unpkg.com/nouislider/dist/nouislider.min.js";
 import "https://unpkg.com/jquery";
 
+// SurveyJs Lit component
 class SurveyCard extends LitElement {
+  // Initialize variables
   static get properties() {
     return {
       config: { type: Object },
     };
   }
 
+  // Config setters [Similar to general constructor]
   setConfig(config) {
+    // Initializing few variables
       this.config = config;
       this.survey = null;
       this.survey_timer = null;
@@ -22,12 +27,14 @@ class SurveyCard extends LitElement {
       this.getCustomCss();
 
       setTimeout(() => {
+      // Start timer or clear timer interval based on the current state of the life cycle entity
       if (
           this._hass?.states[this.config?.state_life_cycle_entity]?.state ===
           "sent" ||
           this._hass?.states[this.config?.state_life_cycle_entity]?.state ===
           "started"
       ) {
+          // Timer logic
           this.startTimer(
           this._hass.states[this.config?.state_life_cycle_entity].state
           );
@@ -37,13 +44,17 @@ class SurveyCard extends LitElement {
       }, 500);
   }
 
+  // Hass setter
   set hass(hass) {
     this._hass = hass;
   }
 
+  // Note: Order of initial function executions: setConfig() -> hass() -> firstUpdated()
+  // First updated [the official documentation](https://lit.dev/docs/v1/components/lifecycle/#firstupdated)
   firstUpdated() {
     var thisNode = this;
     $(document).ready(function () {
+      // We are importing the survey jquery, widgets and showdown package here rather than at the beginning since these cdn packages are asynchronous and we need to ensure that jquery is loaded first before importing surveyjs jquery, widgets and showdown.
       $.getScript("https://unpkg.com/survey-jquery/survey.jquery.min.js").done(
         (_script, _textStatus) => {
           thisNode.constructSurveyUI();
@@ -58,11 +69,13 @@ class SurveyCard extends LitElement {
     });
   }
 
+  // Use the custom imported nouislider and global variables to load css and using getCustomCss function, custom css can be applied to the DOM.
   async getCustomCss() {
     const customCss = this.config?.customCss;
     const noUiSliderStyles = this.config?.noUiSliderStyles;
     const globalCss = this.config?.globalCss;
     if (customCss && noUiSliderStyles && globalCss) {
+      // Dynamically importing custom css files and appending them to the shadow root
       this.customCss = await import(
         this.config?.customCss + "?" + Math.random()
       );
@@ -92,6 +105,7 @@ class SurveyCard extends LitElement {
     // change state to started if state is sent and sets timer to duration specified in config
     if (state == "sent") {
       this._hass.callService("input_select", "select_option", {'entity_id': this.config?.state_life_cycle_entity, 'option': 'started'});
+      // We are utilizing a Timer helper to start the timer and also auto submitting the survey if timer expires
       this._hass.callService("timer", "start", { 'entity_id': this.config?.expiry_timer[0].name, 'duration': this.config.expiry_timer[0].duration });
     }
 
@@ -103,6 +117,7 @@ class SurveyCard extends LitElement {
     }, 1000);
   }
 
+  // Constructing SurveyJs UI [the official documentation](https://surveyjs.io/form-library/documentation/get-started-jquery)
   constructSurveyUI() {
     window["surveyjs-widgets"].nouislider(Survey);
 
@@ -151,6 +166,7 @@ class SurveyCard extends LitElement {
     });
   }
 
+  // Custom css code logic
   pageCssLogic(options) {
     let elementsData;
     if (this.config.surveyjs_json?.elements) {
@@ -199,6 +215,7 @@ class SurveyCard extends LitElement {
   }
 
   render() {
+    // UI render
     return html`
       <link
         rel="stylesheet"
