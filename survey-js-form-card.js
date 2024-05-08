@@ -119,10 +119,6 @@ setConfig(config) {
   this.config = config;
   this.survey = null;
   this.survey_timer = null;
-  this.customCss = "";
-  this.noUiSliderStyles = "";
-  this.globalCss = "";
-  // this.getCustomCss();
 
   setTimeout(() => {
     // Start timer or clear timer interval based on the current state of the life cycle entity
@@ -149,13 +145,6 @@ set hass(hass) {
 
 // Note: Order of initial function executions: setConfig() -> hass() -> firstUpdated()
 // First updated [the official documentation](https://lit.dev/docs/v1/components/lifecycle/#firstupdated)
-// firstUpdated() {
-//   var thisNode = this;
-//   $(document).ready(function () {
-//     thisNode.constructSurveyUI();
-//   });
-// }
-
 firstUpdated() {
   var thisNode = this;
   $(document).ready(function () {
@@ -175,38 +164,6 @@ firstUpdated() {
       "https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.4/showdown.min.js"
     );
   });
-}
-
-// Use the custom imported nouislider and global variables to load css and using getCustomCss function, custom css can be applied to the DOM.
-async getCustomCss() {
-  const customCss = this.config?.customCss;
-  const noUiSliderStyles = this.config?.noUiSliderStyles;
-  const globalCss = this.config?.globalCss;
-  if (customCss && noUiSliderStyles && globalCss) {
-    // Dynamically importing custom css files and appending them to the shadow root
-    this.customCss = await import(
-      this.config?.customCss + "?" + Math.random()
-    );
-    this.noUiSliderStyles = await import(
-      this.config?.noUiSliderStyles + "?" + Math.random()
-    );
-    this.globalCss = await import(
-      this.config?.globalCss + "?" + Math.random()
-    );
-
-    let prependStyle = this.shadowRoot.createElement("style");
-
-    let appendStyle = this.shadowRoot.createElement("style");
-
-    prependStyle.innerHTML = this.customCss?.default;
-
-    this.shadowRoot.prepend(prependStyle);
-
-    appendStyle.innerHTML =
-      this.noUiSliderStyles?.default + " " + this.globalCss?.default;
-
-    this.shadowRoot.append(appendStyle);
-  }
 }
 
 startTimer(state) {
