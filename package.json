@@ -25,10 +25,6 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "jquery": "^3.7.1",
-    "lit-element": "^4.0.5",
-    "nouislider": "^15.7.1",
-    "survey-jquery": "^1.10.1",
-    "surveyjs-widgets": "^1.10.1"
+    "lit-element": "^4.0.5"
   }
 }
