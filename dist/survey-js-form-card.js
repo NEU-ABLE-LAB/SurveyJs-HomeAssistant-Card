@@ -586,6 +586,8 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 },{}],"a2J0g":[function(require,module,exports) {
 // We need import below mentioned packages [Lit & JQuery] initially.
 var _litElement = require("lit-element");
+var _defaultV2Css = require("survey-core/defaultV2.css");
+var _nouisliderCss = require("nouislider/dist/nouislider.css");
 // SurveyJs Lit component
 class SurveyCard extends (0, _litElement.LitElement) {
     static styles = [
@@ -855,21 +857,13 @@ class SurveyCard extends (0, _litElement.LitElement) {
     render() {
         // UI render
         return (0, _litElement.html)`
-      <link
-        rel="stylesheet"
-        href="https://unpkg.com/survey-jquery@1.10.1/defaultV2.min.css"
-      />
-      <link
-        rel="stylesheet"
-        href="https://unpkg.com/nouislider@14.6.0/distribute/nouislider.css"
-      />
       <div id="surveyElement"></div>
     `;
     }
 }
 customElements.define("survey-card", SurveyCard);
 
-},{"lit-element":"kvK5P"}],"kvK5P":[function(require,module,exports) {
+},{"lit-element":"kvK5P","survey-core/defaultV2.css":"aU9Oa","nouislider/dist/nouislider.css":"8VqbC"}],"kvK5P":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "LitElement", ()=>(0, _litElementJs.LitElement));
@@ -1546,6 +1540,6 @@ const o = {
 };
 (globalThis.litElementVersions ??= []).push("4.0.5");
 
-},{"@lit/reactive-element":"hypet","lit-html":"1cmQt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["7q3Ki","a2J0g"], "a2J0g", "parcelRequire660f")
+},{"@lit/reactive-element":"hypet","lit-html":"1cmQt","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"aU9Oa":[function() {},{}],"8VqbC":[function() {},{}]},["7q3Ki","a2J0g"], "a2J0g", "parcelRequire660f")
 
 //# sourceMappingURL=survey-js-form-card.js.map

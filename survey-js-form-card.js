@@ -1,8 +1,11 @@
 // We need import below mentioned packages [Lit & JQuery] initially.
 import { LitElement, html, css } from "lit-element";
+import "survey-core/defaultV2.css";
+import "nouislider/dist/nouislider.css";
 
 // SurveyJs Lit component
 class SurveyCard extends LitElement {
+
   static styles = [
     css`
       .noUi-target {
@@ -330,14 +333,6 @@ class SurveyCard extends LitElement {
   render() {
     // UI render
     return html`
-      <link
-        rel="stylesheet"
-        href="https://unpkg.com/survey-jquery@1.10.1/defaultV2.min.css"
-      />
-      <link
-        rel="stylesheet"
-        href="https://unpkg.com/nouislider@14.6.0/distribute/nouislider.css"
-      />
       <div id="surveyElement"></div>
     `;
   }
