@@ -1,5 +1,5 @@
 // We need import below mentioned packages [Lit & JQuery] initially.
-import { LitElement, html, css } from "lit-element";
+import { LitElement, html, css } from "lit";
 
 // SurveyJs Lit component
 class SurveyCard extends LitElement {

@@ -2,7 +2,13 @@
   "name": "surveyjs-homeassistant-card",
   "version": "1.0.0",
   "description": "A minimal card with manual setup ***",
-  "main": "survey-js-form-card.js",
+  "source": "survey-js-form-card.js",
+  "module": "dist/survey-js-form-card.js",
+  "targets": {
+    "module": {
+      "includeNodeModules": true
+    }
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "parcel watch",
@@ -23,6 +29,6 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "lit-element": "^4.0.5"
+    "lit": "^3.1.3"
   }
 }
