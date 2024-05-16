@@ -1,5 +1,7 @@
 // We need import below mentioned packages [Lit & JQuery] initially.
 import { LitElement, html, css } from "lit";
+import { state } from "lit/decorators.js";
+import { HomeAssistant } from "custom-card-helpers";
 
 // SurveyJs Lit component
 class SurveyCard extends LitElement {
@@ -101,31 +103,29 @@ class SurveyCard extends LitElement {
     `,
   ];
 
-  // Initialize variables
-  static get properties() {
-    return {
-      config: { type: Object },
-    };
-  }
-
+  @state() _config;
+  @state() _hass;
+  @state() survey;
+  @state() survey_timer;
+  
   // Config setters [Similar to general constructor]
   setConfig(config) {
     // Initializing few variables
-    this.config = config;
+    this._config = config;
     this.survey = null;
     this.survey_timer = null;
 
     setTimeout(() => {
       // Start timer or clear timer interval based on the current state of the life cycle entity
       if (
-        this._hass?.states[this.config?.state_life_cycle_entity]?.state ===
+        this._hass?.states[this._config?.state_life_cycle_entity]?.state ===
           "sent" ||
-        this._hass?.states[this.config?.state_life_cycle_entity]?.state ===
+        this._hass?.states[this._config?.state_life_cycle_entity]?.state ===
           "started"
       ) {
         // Timer logic
         this.startTimer(
-          this._hass.states[this.config?.state_life_cycle_entity].state
+          this._hass.states[this._config?.state_life_cycle_entity].state
         );
       } else {
         clearInterval(this.survey_timer);
@@ -134,7 +134,7 @@ class SurveyCard extends LitElement {
   }
 
   // Hass setter
-  set hass(hass) {
+  set hass(hass: HomeAssistant) {
     this._hass = hass;
   }
 
@@ -206,19 +206,19 @@ class SurveyCard extends LitElement {
     // change state to started if state is sent and sets timer to duration specified in config
     if (state == "sent") {
       this._hass.callService("input_select", "select_option", {
-        entity_id: this.config?.state_life_cycle_entity,
+        entity_id: this._config?.state_life_cycle_entity,
         option: "started",
       });
       // We are utilizing a Timer helper to start the timer and also auto submitting the survey if timer expires
       this._hass.callService("timer", "start", {
-        entity_id: this.config?.expiry_timer[0].name,
-        duration: this.config.expiry_timer[0].duration,
+        entity_id: this._config?.expiry_timer[0].name,
+        duration: this._config.expiry_timer[0].duration,
       });
     }
 
     this.survey_timer = setInterval(() => {
       if (
-        this._hass?.states[this.config?.expiry_timer[0].name].state == "idle"
+        this._hass?.states[this._config?.expiry_timer[0].name].state == "idle"
       ) {
         clearInterval(this.survey_timer);
         this.survey.doComplete();
@@ -228,9 +228,10 @@ class SurveyCard extends LitElement {
 
   // Constructing SurveyJs UI [the official documentation](https://surveyjs.io/form-library/documentation/get-started-jquery)
   constructSurveyUI() {
+    // @ts-ignore
     window["surveyjs-widgets"].nouislider(Survey);
-
-    this.survey = new Survey.Model(this.config.surveyjs_json);
+    // @ts-ignore
+    this.survey = new Survey.Model(this._config.surveyjs_json);
 
     this.survey.onUpdateQuestionCssClasses.add((_, options) => {
       this.pageCssLogic(options);
@@ -238,9 +239,9 @@ class SurveyCard extends LitElement {
 
     this.survey.onComplete.add((sender) => {
       setTimeout(() => {
-        if (this.config?.floor_plan_location) {
+        if (this._config?.floor_plan_location) {
           sender.data.selectedFloorPlan =
-            this._hass.states[this.config?.floor_plan_location]?.state;
+            this._hass.states[this._config?.floor_plan_location]?.state;
         }
 
         const results = {
@@ -250,16 +251,16 @@ class SurveyCard extends LitElement {
 
         this._hass
           .callService("input_text", "set_value", {
-            entity_id: this.config?.survey_response_entity,
+            entity_id: this._config?.survey_response_entity,
             value: JSON.stringify(results),
           })
           .then((_data) => {
             this._hass.callService("input_select", "select_option", {
-              entity_id: this.config?.state_life_cycle_entity,
+              entity_id: this._config?.state_life_cycle_entity,
               option: "received",
             });
             this._hass.callService("timer", "cancel", {
-              entity_id: this.config?.expiry_timer[0].name,
+              entity_id: this._config?.expiry_timer[0].name,
             });
 
             // Currently below code is not required since we are hiding the UI under the 'received' survey life cycle state
@@ -275,7 +276,7 @@ class SurveyCard extends LitElement {
           }); // : adds a thank you page,
       }, 500);
     });
-
+    // @ts-ignore
     $(this.shadowRoot.getElementById("surveyElement")).Survey({
       model: this.survey,
     });
@@ -284,11 +285,11 @@ class SurveyCard extends LitElement {
   // Custom css code logic
   pageCssLogic(options) {
     let elementsData;
-    if (this.config.surveyjs_json?.elements) {
-      elementsData = this.config.surveyjs_json?.elements;
+    if (this._config.surveyjs_json?.elements) {
+      elementsData = this._config.surveyjs_json?.elements;
     } else {
       elementsData =
-        this.config.surveyjs_json?.pages[this.survey?.currentPageNo]?.elements;
+        this._config.surveyjs_json?.pages[this.survey?.currentPageNo]?.elements;
     }
     for (let ele of elementsData) {
       if (
@@ -314,7 +315,7 @@ class SurveyCard extends LitElement {
     classKey.forEach((v, i) => {
       classes[v] = classValue[i];
     });
-
+    // @ts-ignore
     var converter = new showdown.Converter();
     this.survey.onTextMarkdown.add(function (_survey, options) {
       //convert the markdown text to html
