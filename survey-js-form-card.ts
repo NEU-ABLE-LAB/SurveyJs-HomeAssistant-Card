@@ -194,7 +194,6 @@ class SurveyCard extends LitElement {
       script4Promise,
     ])
       .then(() => {
-        console.log("All scripts loaded");
         this.constructSurveyUI();
       })
       .catch((error) => {
@@ -294,7 +293,7 @@ class SurveyCard extends LitElement {
     for (let ele of elementsData) {
       if (
         options.question.getType() == ele.type &&
-        options.question.fullTitle == ele.title &&
+        options.question.jsonObj.title == ele.title &&
         ele?.customCssClassDetails
       ) {
         const classes = options.cssClasses;

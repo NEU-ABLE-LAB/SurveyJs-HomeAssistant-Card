@@ -1521,7 +1521,6 @@ class $5b21bedcf572798e$var$SurveyCard extends (0, $ab210b2da7b39b9d$export$3f2f
             script3Promise,
             script4Promise
         ]).then(()=>{
-            console.log("All scripts loaded");
             this.constructSurveyUI();
         }).catch((error)=>{
             console.error("Error loading scripts:", error);
@@ -1596,7 +1595,7 @@ class $5b21bedcf572798e$var$SurveyCard extends (0, $ab210b2da7b39b9d$export$3f2f
         let elementsData;
         if (this._config.surveyjs_json?.elements) elementsData = this._config.surveyjs_json?.elements;
         else elementsData = this._config.surveyjs_json?.pages[this.survey?.currentPageNo]?.elements;
-        for (let ele of elementsData)if (options.question.getType() == ele.type && options.question.fullTitle == ele.title && ele?.customCssClassDetails) {
+        for (let ele of elementsData)if (options.question.getType() == ele.type && options.question.jsonObj.title == ele.title && ele?.customCssClassDetails) {
             const classes = options.cssClasses;
             const classKey = Object.keys(Object.values(ele?.customCssClassDetails)[0]);
             const classValue = Object.values(Object.values(ele?.customCssClassDetails)[0]);
