@@ -120,3 +120,9 @@ May 13th week
 1. Fix CSS Glitches issue 
 
 2. Convert JS to TS (Reference: https://github.com/home-assistant-tutorials/10.toggle-card-typescript/)
+
+----------------------
+
+May 20th week
+
+1. Avoid using unpkg to install dependencies on fly. (Try maintaing dependencies locally)
