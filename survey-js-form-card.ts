@@ -2,6 +2,10 @@
 import { LitElement, html, css } from "lit";
 import { state } from "lit/decorators.js";
 import { HomeAssistant } from "custom-card-helpers";
+import $ from "jquery";
+import * as Survey from "survey-jquery";
+import showdown from "showdown";
+import * as widgets from "surveyjs-widgets";
 
 // SurveyJs Lit component
 class SurveyCard extends LitElement {
@@ -107,7 +111,7 @@ class SurveyCard extends LitElement {
   @state() _hass;
   @state() survey;
   @state() survey_timer;
-  
+
   // Config setters [Similar to general constructor]
   setConfig(config) {
     // Initializing few variables
@@ -138,72 +142,11 @@ class SurveyCard extends LitElement {
     this._hass = hass;
   }
 
+  // Note: Order of initial function executions: setConfig() -> hass() -> firstUpdated()
+  // First updated [the official documentation](https://lit.dev/docs/v1/components/lifecycle/#firstupdated)
   firstUpdated() {
     this.constructSurveyUI();
   }
-
-  // Note: Order of initial function executions: setConfig() -> hass() -> firstUpdated()
-  // First updated [the official documentation](https://lit.dev/docs/v1/components/lifecycle/#firstupdated)
-  // firstUpdated() {
-  //   const jqueryScript = document.createElement("script");
-  //   jqueryScript.src = "https://unpkg.com/jquery";
-  //   jqueryScript.onload = () => {
-  //     this.loadSurvey();
-  //   };
-  //   document.head.appendChild(jqueryScript);
-  // }
-
-  // loadSurvey() {
-  //   // Create promises for each script's onload event
-  //   const script1Promise = new Promise((resolve) => {
-  //     const script1 = document.createElement("script");
-  //     script1.src =
-  //       "https://unpkg.com/nouislider@14.6.0/distribute/nouislider.min.js";
-  //     script1.defer = true;
-  //     script1.onload = resolve; // Resolve the promise when script1 is loaded
-  //     document.head.appendChild(script1);
-  //   });
-
-  //   const script2Promise = new Promise((resolve) => {
-  //     const script2 = document.createElement("script");
-  //     script2.src =
-  //       "https://unpkg.com/surveyjs-widgets@1.9.90/surveyjs-widgets.min.js";
-  //     script2.defer = true;
-  //     script2.onload = resolve; // Resolve the promise when script2 is loaded
-  //     document.head.appendChild(script2);
-  //   });
-
-  //   const script3Promise = new Promise((resolve) => {
-  //     const script3 = document.createElement("script");
-  //     script3.src =
-  //       "https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.4/showdown.min.js";
-  //     script3.defer = true;
-  //     script3.onload = resolve; // Resolve the promise when script3 is loaded
-  //     document.head.appendChild(script3);
-  //   });
-
-  //   const script4Promise = new Promise((resolve) => {
-  //     const script4 = document.createElement("script");
-  //     script4.src = "https://unpkg.com/survey-jquery/survey.jquery.min.js";
-  //     script4.defer = true;
-  //     script4.onload = resolve;
-  //     document.head.appendChild(script4);
-  //   });
-
-  //   // Wait for all promises to be resolved
-  //   Promise.all([
-  //     script1Promise,
-  //     script2Promise,
-  //     script3Promise,
-  //     script4Promise,
-  //   ])
-  //     .then(() => {
-  //       this.constructSurveyUI();
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error loading scripts:", error);
-  //     });
-  // }
 
   startTimer(state) {
     // change state to started if state is sent and sets timer to duration specified in config
@@ -231,9 +174,7 @@ class SurveyCard extends LitElement {
 
   // Constructing SurveyJs UI [the official documentation](https://surveyjs.io/form-library/documentation/get-started-jquery)
   constructSurveyUI() {
-    // @ts-ignore
-    window["surveyjs-widgets"].nouislider(Survey);
-    // @ts-ignore
+    widgets.nouislider(Survey);
     this.survey = new Survey.Model(this._config.surveyjs_json);
 
     this.survey.onUpdateQuestionCssClasses.add((_, options) => {
@@ -334,12 +275,6 @@ class SurveyCard extends LitElement {
   render() {
     // UI render
     return html`
-    <script src="https://unpkg.com/jquery"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.6.4/showdown.min.js"></script>
-    <script src="https://unpkg.com/nouislider@14.6.0/distribute/nouislider.min.js"></script>
-    <script src="https://unpkg.com/survey-jquery/survey.jquery.min.js"></script>
-    <script src="https://unpkg.com/survey-jquery@1.10.5/themes/index.min.js"></script>
-    <script src="https://unpkg.com/surveyjs-widgets@1.9.90/surveyjs-widgets.min.js"></script>
       <link
         rel="stylesheet"
         href="https://unpkg.com/survey-jquery@1.10.1/defaultV2.min.css"
