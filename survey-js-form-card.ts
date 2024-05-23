@@ -1,111 +1,18 @@
 // We need import below mentioned packages [Lit & JQuery] initially.
-import { LitElement, html, css } from "lit";
+import { LitElement, html } from "lit";
 import { state } from "lit/decorators.js";
 import { HomeAssistant } from "custom-card-helpers";
 import $ from "jquery";
 import * as Survey from "survey-jquery";
 import showdown from "showdown";
 import * as widgets from "surveyjs-widgets";
+import {globalStyles} from "./css/global.js";
+import {noUiSliderStyles} from "./css/nouislider.js";
+import {surveyCardCustomCssStyles} from "./css/survey-card-custom-css.js";
 
 // SurveyJs Lit component
 class SurveyCard extends LitElement {
-  static styles = [
-    css`
-      .noUi-target {
-        margin-bottom: 20px !important;
-        margin-top: -40px;
-      }
-      .noUi-connects {
-        background: lightgray;
-      }
-      .noUi-connect {
-        background: none;
-      }
-      .noUi-marker-normal {
-        display: none;
-      }
-      .noUi-horizontal {
-        height: 7px;
-      }
-      .noUi-handle {
-        border-radius: 50%;
-        background: green;
-        box-shadow: none;
-        width: 20px !important;
-        height: 20px !important;
-        right: -8px !important;
-      }
-      .noUi-handle:after,
-      .noUi-handle:before {
-        background: none;
-      }
-      .noUi-tooltip {
-        display: none;
-      }
-      .noUi-active .noUi-tooltip {
-        display: block;
-        left: -200%;
-        bottom: -35%;
-      }
-    `,
-    css`
-      .sd-element__num {
-        display: none;
-      }
-      .sd-root-modern {
-        background: none !important;
-      }
-      .sd-element--with-frame {
-        padding: 5px !important;
-      }
-      .sv-string-viewer {
-        position: relative;
-        font-size: 18px !important;
-      }
-      img {
-        position: absolute;
-        left: -23px;
-        top: 2px;
-      }
-    `,
-    css`
-      .rating-item {
-        position: relative;
-        box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2px;
-        border-radius: calc(12.5 * var(--base-unit, 8px));
-        white-space: nowrap;
-        padding: calc(0.5 * var(--base-unit, 8px))
-          calc(2.5 * var(--base-unit, 8px));
-        height: calc(6 * var(--base-unit, 8px));
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-sizing: border-box;
-        min-width: calc(6 * var(--base-unit, 8px));
-        text-align: center;
-        fill: var(--sjs-general-forecolor, var(--foreground, #161616));
-        font-size: calc(2 * var(--base-unit, 8px));
-        width: 90%;
-        margin: auto;
-      }
-      .boolean {
-        display: flex;
-        width: max-content;
-        position: relative;
-        padding: calc(0.5 * var(--base-unit, 8px));
-        background: lightgreen;
-        box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2px inset;
-        border-radius: calc(12.5 * var(--base-unit, 8px));
-      }
-      .element-with-frame {
-        border-radius: calc(0.5 * var(--base-unit, 8px));
-        box-sizing: border-box;
-        background: var(--sjs-question-background, var(--background, #fff));
-        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.15);
-        padding: 10px 35px 35px 35px !important;
-      }
-    `,
-  ];
+  static styles = [noUiSliderStyles, globalStyles, surveyCardCustomCssStyles];
 
   @state() _config;
   @state() _hass;
