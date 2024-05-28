@@ -5,9 +5,12 @@ import $ from "jquery";
 import * as Survey from "survey-jquery";
 import showdown from "showdown";
 import * as widgets from "surveyjs-widgets";
-import {globalStyles} from "./css/global.js";
-import {noUiSliderStyles} from "./css/nouislider.js";
-import {surveyCardCustomCssStyles} from "./css/survey-card-custom-css.js";
+import "./css/imports.css";
+// import "survey-jquery/survey.min.css";
+// import "nouislider/distribute/nouislider.css";
+import { globalStyles } from "./css/global.js";
+import { noUiSliderStyles } from "./css/nouislider.js";
+import { surveyCardCustomCssStyles } from "./css/survey-card-custom-css.js";
 
 // SurveyJs Lit component
 class SurveyCard extends LitElement {
@@ -181,14 +184,6 @@ class SurveyCard extends LitElement {
   render() {
     // UI render
     return html`
-      <link
-        rel="stylesheet"
-        href="https://unpkg.com/survey-jquery@1.10.1/defaultV2.min.css"
-      />
-      <link
-        rel="stylesheet"
-        href="https://unpkg.com/nouislider@14.6.0/distribute/nouislider.css"
-      />
       <div id="surveyElement"></div>
     `;
   }

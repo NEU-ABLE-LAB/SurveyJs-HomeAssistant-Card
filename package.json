@@ -9,6 +9,9 @@
       "includeNodeModules": true
     }
   },
+  "@parcel/transformer-css": {
+    "cssModules": true
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "parcel watch",
@@ -25,6 +28,7 @@
   },
   "homepage": "https://github.com/NEU-ABLE-LAB/SurveyJs-HomeAssistant-Card#readme",
   "devDependencies": {
+    "lit-css-loader": "^3.0.0",
     "parcel": "^2.12.0",
     "process": "^0.11.10"
   },
