@@ -18,6 +18,13 @@ module.exports = {
       },
       {
         test: /\.css$/,
+        loader: 'lit-css-loader',
+        options: {
+          specifier: 'lit-element' // defaults to `lit`
+        }
+      },
+      {
+        test: /\.css$/,
         use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
       {
