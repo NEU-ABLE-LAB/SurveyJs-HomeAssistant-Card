@@ -1,4 +1,3 @@
-// We need import below mentioned packages [Lit & JQuery] initially.
 import { LitElement, html } from "lit";
 import { state } from "lit/decorators.js";
 import { HomeAssistant } from "custom-card-helpers";
