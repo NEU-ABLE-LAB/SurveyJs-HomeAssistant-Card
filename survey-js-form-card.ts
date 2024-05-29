@@ -5,13 +5,18 @@ import $ from "jquery";
 import * as Survey from "survey-jquery";
 import showdown from "showdown";
 import * as widgets from "surveyjs-widgets";
-import {globalStyles} from "./css/global.js";
-import {noUiSliderStyles} from "./css/nouislider.js";
-import {surveyCardCustomCssStyles} from "./css/survey-card-custom-css.js";
+import "./css/imports.css";
+import { globalStyles } from "./css/global.js";
+import { customNoUiSliderStyles } from "./css/customNoUiSlider.js";
+import { surveyCardCustomCssStyles } from "./css/survey-card-custom-css.js";
 
 // SurveyJs Lit component
 class SurveyCard extends LitElement {
-  static styles = [noUiSliderStyles, globalStyles, surveyCardCustomCssStyles];
+  static styles = [
+    customNoUiSliderStyles,
+    globalStyles,
+    surveyCardCustomCssStyles,
+  ];
 
   @state() _config;
   @state() _hass;
