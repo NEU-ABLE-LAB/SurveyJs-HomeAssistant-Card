@@ -5,8 +5,11 @@ import $ from "jquery";
 import * as Survey from "survey-jquery";
 import showdown from "showdown";
 import * as widgets from "surveyjs-widgets";
-import { surveyCardCssStyles } from "./css/survey.js";
-import { noUiSliderStyles } from "./css/nouislider.js";
+import "survey-jquery/defaultV2.css";
+import "nouislider/distribute/nouislider.css";
+// import "./css/imports.css";
+// import { surveyCardCssStyles } from "./css/survey.js";
+// import { noUiSliderStyles } from "./css/nouislider.js";
 import { globalStyles } from "./css/global.js";
 import { customNoUiSliderStyles } from "./css/customNoUiSlider.js";
 import { surveyCardCustomCssStyles } from "./css/survey-card-custom-css.js";
@@ -14,8 +17,8 @@ import { surveyCardCustomCssStyles } from "./css/survey-card-custom-css.js";
 // SurveyJs Lit component
 class SurveyCard extends LitElement {
   static styles = [
-    surveyCardCssStyles,
-    noUiSliderStyles,
+    // surveyCardCssStyles,
+    // noUiSliderStyles,
     customNoUiSliderStyles,
     globalStyles,
     surveyCardCustomCssStyles,
@@ -188,7 +191,7 @@ class SurveyCard extends LitElement {
 
   render() {
     // UI render
-    return html` <div id="surveyElement"></div> `;
+    return html`<div id="surveyElement"></div>`;
   }
 }
 
