@@ -1,8 +1,7 @@
 const path = require("path");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  mode: 'production',
+  mode: "production",
   entry: "./survey-js-form-card.ts",
   output: {
     path: path.resolve(__dirname, "dist"),
@@ -20,13 +19,17 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        exclude: /node_modules/,
+        use: ["css-loader"],
       },
+      {
+        test: /\.css$/,
+        include: /node_modules/,
+        loader: 'lit-css-loader',
+        options: {
+          specifier: 'lit-element'
+        }
+      }
     ],
   },
-  plugins: [
-    new MiniCssExtractPlugin({
-      filename: "[name].css"
-    }),
-  ]
 };

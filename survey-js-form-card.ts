@@ -5,15 +5,15 @@ import $ from "jquery";
 import * as Survey from "survey-jquery";
 import showdown from "showdown";
 import * as widgets from "surveyjs-widgets";
-import "survey-jquery/defaultV2.min.css";
-import "nouislider/distribute/nouislider.min.css";
+import surveyJqueryStyles from "survey-jquery/defaultV2.min.css";
+import noUiSliderGlobalStyles from "nouislider/distribute/nouislider.min.css";
 import { globalStyles } from "./css/global.js";
 import { noUiSliderStyles } from "./css/nouislider.js";
 import { surveyCardCustomCssStyles } from "./css/survey-card-custom-css.js";
 
 // SurveyJs Lit component
 class SurveyCard extends LitElement {
-  static styles = [noUiSliderStyles, globalStyles, surveyCardCustomCssStyles];
+  static styles = [surveyJqueryStyles, noUiSliderGlobalStyles, noUiSliderStyles, globalStyles, surveyCardCustomCssStyles];
 
   @state() _config;
   @state() _hass;
@@ -182,10 +182,7 @@ class SurveyCard extends LitElement {
 
   render() {
     // UI render
-    return html`
-      <link rel="stylesheet" href="/local/dist/main.css" />
-      <div id="surveyElement"></div>
-    `;
+    return html` <div id="surveyElement"></div> `;
   }
 }
 
