@@ -1,4 +1,3 @@
-// We need import below mentioned packages [Lit & JQuery] initially.
 import { LitElement, html } from "lit";
 import { state } from "lit/decorators.js";
 import { HomeAssistant } from "custom-card-helpers";
@@ -6,11 +5,11 @@ import $ from "jquery";
 import * as Survey from "survey-jquery";
 import showdown from "showdown";
 import * as widgets from "surveyjs-widgets";
-import "survey-jquery/survey.min.css";
-import "nouislider/distribute/nouislider.css";
-import {globalStyles} from "./css/global.js";
-import {noUiSliderStyles} from "./css/nouislider.js";
-import {surveyCardCustomCssStyles} from "./css/survey-card-custom-css.js";
+import "survey-jquery/defaultV2.min.css";
+import "nouislider/distribute/nouislider.min.css";
+import { globalStyles } from "./css/global.js";
+import { noUiSliderStyles } from "./css/nouislider.js";
+import { surveyCardCustomCssStyles } from "./css/survey-card-custom-css.js";
 
 // SurveyJs Lit component
 class SurveyCard extends LitElement {
@@ -184,6 +183,7 @@ class SurveyCard extends LitElement {
   render() {
     // UI render
     return html`
+      <link rel="stylesheet" href="/local/dist/main.css" />
       <div id="surveyElement"></div>
     `;
   }
