@@ -1,4 +1,6 @@
-const globalStyles = `
+import { css } from "lit";
+
+export const globalStyles = css`
   .sd-element__num {
     display: none;
   }
@@ -18,5 +20,3 @@ const globalStyles = `
     top: 2px;
   }
 `;
-
-export default globalStyles;

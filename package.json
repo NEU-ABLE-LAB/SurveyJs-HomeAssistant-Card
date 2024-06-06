@@ -1,0 +1,43 @@
+{
+  "name": "surveyjs-homeassistant-card",
+  "version": "1.0.0",
+  "description": "A minimal card with manual setup ***",
+  "source": "survey-js-form-card.ts",
+  "module": "dist/survey-js-form-card.js",
+  "targets": {
+    "module": {
+      "includeNodeModules": true
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://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@github.com/NEU-ABLE-LAB/SurveyJs-HomeAssistant-Card.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NEU-ABLE-LAB/SurveyJs-HomeAssistant-Card/issues"
+  },
+  "homepage": "https://github.com/NEU-ABLE-LAB/SurveyJs-HomeAssistant-Card#readme",
+  "devDependencies": {
+    "css-loader": "^7.1.2",
+    "lit-css-loader": "^3.0.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.4.5",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "custom-card-helpers": "^1.9.0",
+    "jquery": "^3.7.1",
+    "lit": "^2.7.4",
+    "nouislider": "^14.6.0",
+    "showdown": "^2.1.0",
+    "survey-jquery": "^1.10.1",
+    "surveyjs-widgets": "^1.10.5"
+  }
+}

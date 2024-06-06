@@ -1,4 +1,6 @@
-const nouisliderStyles = `
+import { css } from "lit";
+
+export const noUiSliderStyles = css`
   .noUi-target {
     margin-bottom: 20px !important;
     margin-top: -40px;
@@ -36,5 +38,3 @@ const nouisliderStyles = `
     bottom: -35%;
   }
 `;
-
-export default nouisliderStyles;

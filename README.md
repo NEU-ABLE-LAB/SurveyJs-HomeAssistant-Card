@@ -76,3 +76,53 @@ should prefer `SSH` over `HTTPS`. This allows you to easily push to your
 repository.
 
 ##  For further deep-dive into the code go to code-explainer.md
+
+## TODO
+Apr 22nd week
+1. Explore Homeassistant Tutorials (https://github.com/home-assistant-tutorials)
+2. Explore Parcel & 8th tutorial from Homeassistant Tutorials (https://github.com/home-assistant-tutorials/08.toggle-card-with-toolchain)
+
+Apr 29th week - Final projects, exams & graduation ceremony
+
+May 6th week
+1. Integrate parcel into the project.
+
+May 13th week
+1. Convert JS to TS (Reference: https://github.com/home-assistant-tutorials/10.toggle-card-typescript/)
+2. Make use css files instead of writing css code in js files
+
+May 20th week
+1. Avoid using unpkg to install dependencies on fly. (Try maintaing dependencies locally)
+
+Next: TBD
+
+------------------
+
+May 6th week Results: 
+
+1. Successfully integrated parcel into the project. 
+
+2. Eliminated dynamic imports of css and making use of Lit static styles 
+
+3. [CSS Glitches: If we are rendering multiple same page components in one view, apart from the first component remaining components are not making use of custom css styles] -> This is something which needs to be fixed 
+
+4. Issues I came across: 
+
+    a. Parcel or Webpack won't deal with dynamic url paths using dynamic imports. 
+
+    b. Initially tried with nodemodules to eliminate unpkg way of downloading packages, but didn't worked out, will try this again at the end. 
+
+---------------------
+
+Upcoming schedule:
+May 13th week 
+
+1. Fix CSS Glitches issue 
+
+2. Convert JS to TS (Reference: https://github.com/home-assistant-tutorials/10.toggle-card-typescript/)
+
+----------------------
+
+May 20th week
+
+1. Avoid using unpkg to install dependencies on fly. (Try maintaing dependencies locally)
