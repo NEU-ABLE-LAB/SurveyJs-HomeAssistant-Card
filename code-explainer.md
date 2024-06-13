@@ -1,6 +1,6 @@
 ## The Card Code
 
-Find the code in the file named `survey-js-form-card.js` alongside with this README.
+Find the code in the file named `survey-js-form-card.ts` alongside with this README.
 
 ### A custom element
 
@@ -159,10 +159,6 @@ Custom css file content:
 
 ![CustomCss](img/custom-styles.png)
 
-Declare customCss variable in the home assistant configuration editor like below:
-
-![CustomCssConfig](img/card-config-2.png)
-
 Need to declare a property name called customCssClassDetails at every question level in the configurations. 
  
 Follow the below syntax:
@@ -252,24 +248,6 @@ title: ![A dog](/local/img/thermometer-svgrepo-com.svg =18x18) What room are you
 
 Output:
 ![Markdown](img/markdown.png)
-
-### Page cache removal
-
-When new custom css modifications are posted to the HACS github repository, the old changes are not reflected by removing the cached page.
- 
- Below is the code to remove page cache
- 
- ```js
-      this.customCss = await import(
-        this.config?.customCss + "?" + Math.random()
-      );
-      this.noUiSliderStyles = await import(
-        this.config?.noUiSliderStyles + "?" + Math.random()
-      );
-      this.globalCss = await import(
-        this.config?.globalCss + "?" + Math.random()
-      );
- ```
 
  ### Homeassistant DB:
 
