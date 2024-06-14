@@ -13,6 +13,7 @@ import { surveyCardCustomCssStyles } from "./css/survey-card-custom-css.js";
 
 // SurveyJs Lit component
 class SurveyCard extends LitElement {
+  // Sharing styles [https://lit.dev/docs/components/styles/#sharing-styles]
   static styles = [surveyJqueryStyles, noUiSliderGlobalStyles, noUiSliderStyles, globalStyles, surveyCardCustomCssStyles];
 
   @state() _config;

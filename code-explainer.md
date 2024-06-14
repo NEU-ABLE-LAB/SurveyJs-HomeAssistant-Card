@@ -1,6 +1,6 @@
 ## The Card Code
 
-Find the code in the file named `survey-js-form-card.js` alongside with this README.
+Find the code in the file named `survey-js-form-card.ts` alongside with this README.
 
 ### A custom element
 
@@ -159,10 +159,6 @@ Custom css file content:
 
 ![CustomCss](img/custom-styles.png)
 
-Declare customCss variable in the home assistant configuration editor like below:
-
-![CustomCssConfig](img/card-config-2.png)
-
 Need to declare a property name called customCssClassDetails at every question level in the configurations. 
  
 Follow the below syntax:
@@ -244,32 +240,24 @@ Global Css Usage:
 
 As in the above screenshot, you can declare the global and module level css javascript files in the css folder.
 
+**Note**: To use the CSS files from **node_modules**, we need the **global.d.ts** file, which provides TypeScript declarations for CSS module imports
+
 ###  Mark Down Images
 
 Apply markdown image path beside any text like below
 
 title: ![A dog](/local/img/thermometer-svgrepo-com.svg =18x18) What room are you in?
 
+### Typescript
+
+We are using TypeScript in our codebase, and the TypeScript compiler options are declared in the **tsconfig.json** file
+
+### Code Bundle
+
+We are using **Webpack** to bundle all files into a single JavaScript file by making use of the **webpack.config.js** file 
+
 Output:
 ![Markdown](img/markdown.png)
-
-### Page cache removal
-
-When new custom css modifications are posted to the HACS github repository, the old changes are not reflected by removing the cached page.
- 
- Below is the code to remove page cache
- 
- ```js
-      this.customCss = await import(
-        this.config?.customCss + "?" + Math.random()
-      );
-      this.noUiSliderStyles = await import(
-        this.config?.noUiSliderStyles + "?" + Math.random()
-      );
-      this.globalCss = await import(
-        this.config?.globalCss + "?" + Math.random()
-      );
- ```
 
  ### Homeassistant DB:
 
