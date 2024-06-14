@@ -240,11 +240,21 @@ Global Css Usage:
 
 As in the above screenshot, you can declare the global and module level css javascript files in the css folder.
 
+**Note**: To use the CSS files from **node_modules**, we need the **global.d.ts** file, which provides TypeScript declarations for CSS module imports
+
 ###  Mark Down Images
 
 Apply markdown image path beside any text like below
 
 title: ![A dog](/local/img/thermometer-svgrepo-com.svg =18x18) What room are you in?
+
+### Typescript
+
+We are using TypeScript in our codebase, and the TypeScript compiler options are declared in the **tsconfig.json** file
+
+### Code Bundle
+
+We are using **Webpack** to bundle all files into a single JavaScript file by making use of the **webpack.config.js** file 
 
 Output:
 ![Markdown](img/markdown.png)
