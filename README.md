@@ -1,78 +1,182 @@
 # SurveyJs Form Card
-A minimal card with manual setup
+The SurveyJS Form Card is a custom integration for [Home Assistant][home-assistant] that allows you to embed dynamic and interactive surveys or forms within Home Assistant cards. This integration leverages the powerful SurveyJS library to create, manage, and display forms, enabling users to collect and process data directly from their Home Assistant dashboards.
 ***
-
 
 * @published: May 2023
 * @author: Manikanta Reddy Thikkavarapu
 * @workspace: `config/www`
 
-The target of this tutorial is to show minimal steps to be done to get hello
-world output from a card written all by yourself. The setup is still done
-manually to understand the technical requirements. More advanced solutions will
-be covered by future tutorials. Please understand minimal as a reasonable
-minimum to get started, not as the absolute minimum.
+[![hacs][hacs-badge]][hacs-url]
+[![release][release-badge]][release-url]
+![downloads][downloads-badge]
 
 ## Prerequisites
 
 * [Development Environment](https://github.com/home-assistant-tutorials/01.development-environment)
 * the Prerequisites named there
-* basic skills of Javascript, Jquery, Web Components, Lit Library
+* basic skills of Javascript, Jquery, Web Components, Lit Library, Webpack
 * a workspace `config/www`
 
-## TODO: Add How to: HACS installation 
+## Installation
 
-* HACS is the Home Assistant Community Store where you can find extra integrations for Home Assistant that are not part of the core installation.
-* First, let’s make sure that you have the advanced mode enabled for your user. This way you see more options in Home Assistant.
-1. Go to your Profile Name.
-2. Scroll down and enable Advanced Mode.
-3. To install HACS, you need to install the SSH Terminal first.
-4. Go to Settings.
-5. Go to Add-ons.
-6. Click Add-on Store.
-7. Click the Terminal & SSH card.
-8. Click Install.
-9. Turn on all the options and click start.
-10. You’ll now see a new Terminal menu item in the left menu.
-11. Now we can install HACS.
-12. Go to Terminal.
-13. Type the following code.
-wget -O - https://get.hacs.xyz | bash -
-14. Wait until the code is downloaded.
-15. Now reboot Home Assistant.
-16. Go to Settings, System, Restart.
-17. Go to Settings -> Devices and Services.
-18. Click Add integration and search for HACS.
-19. If you do not see HACS in the list, then please clear your browser cache and try again.
-20. Click HACS.
-21. Tick all the boxes and click Submit.
+### HACS
 
-Copy the key that is shown in the dialog box, and click on the link to open GitHub.
+SurveyJs Form Card is available in [HACS][hacs] (Home Assistant Community Store).
 
-Log in to GitHub.
-If you do not have a GitHub account yet, please create one first.
+1. Install HACS if you don't have it already
+2. Open HACS in Home Assistant
+3. Go to "Frontend" section
+4. Search for "SurveyJs Form Card" and download the card
 
-Paste the code that you copied from Home Assistant.
-1. Click Continue.
-2. Click Authorize hacs.
-3. Now go back to Home Assistant.
-4. Click Finish.
-5. You’ll see a HACS menu item on the left menu.
-6. If you click HACS, you’ll see options to install HACS integrations into Home Assistant.
-7. So, HACS is now installed and you can start installing HACS integrations as of now!
+### Manual
 
-## TODO: Manual Installation
+1. Download `dist/survey-js-form-card.js` file from the [latest release][release-url].
+2. Put `survey-js-form-card.js` file into your `config/www` folder.
 
-## Cloning the Repository
+### Adding the Resource
 
-You may clone this repository into your workspace and follow along.
-Alternatively you may want to write the code yourself, to get a deeper effect of
-learning. Just decide what works best for you.
+Open your admin account of the development environment in the web browser. Did
+you already unlock **Advanced Mode**?
 
-Fork the repository on Github into your own instance. Open the workspace
-directory in the command-line. Call `git clone <URL>`. Use the `URL` Github does
-give you, when you click the button `Code`. If your setup is well done, you
-should prefer `SSH` over `HTTPS`. This allows you to easily push to your
-repository.
+Go to ***Settings*** > ***Dashboard***. Click the three dots in the upper right
+hand corner to open ***Resources***. Click ***ADD RESOURCE*** in the lower right
+hand corner.
+
+##### HACS
+As the URL enter `/hacsfiles/SurveyJs-HomeAssistant-Card/survey-js-form-card.js?hacstag=66035578447`. Choose ***JavaScript Module*** and submit.
+
+![adding as resource](img/adding-as-resource_prod.png)
+
+##### Manual
+As the URL enter `/local/survey-js-form-card.js`. Choose ***JavaScript Module*** and submit.
+
+![adding as resource](img/adding-as-resource_dev.png)
+
+### Using the Card
+
+Go to a dashboard. Use the three dots in the upper right hand corner to edit the
+dashboard. Take control if required. Click ***+ ADD CARD***. At the bottom
+select ***Manual*** to add a custom card.
+
+![card configuration](img/card-config-1.png)
+
+In the card configuration enter:
+
+```yaml
+type: custom:survey-card
+entity: sensor.survey_js_entity
+surveyjs_json: {
+ "pages": [
+  {
+   "name": "page1",
+   "elements": [
+    {
+     "type": "checkbox",
+     "name": "car",
+     "width": "1000px",
+     "minWidth": "1000px",
+     "maxWidth": "1000px",
+     "title": "Which is the brand of your car?",
+     "description": "If you own cars from multiple brands, please select all of them.",
+     "isRequired": true,
+     "choices": [
+      "Ford",
+      "Vauxhall",
+      "Volkswagen"
+     ],
+     "separateSpecialChoices": true,
+     "showOtherItem": true,
+     "showNoneItem": true,
+     "colCount": 2,
+     "showSelectAllItem": true
+    }
+   ]
+  }
+ ],
+ "showQuestionNumbers": "off"
+}
+```
+
+1. type: custom:survey-card (Don't forget the `custom` prefix to custom element card & `custom:survey-card` name should match with whatever name we give below) -> 
+```js
+customElements.define("survey-card", SurveyCard);
+```
+2. entity: sensor.survey_js_entity (Here you need to mention whatever entity you are using)
+3. surveyjs_json: Copy paste the survey json
+
+```json
+{
+ "pages": [
+  {
+   "name": "page1",
+   "elements": [
+    {
+     "type": "checkbox",
+     "name": "car",
+     "width": "1000px",
+     "minWidth": "1000px",
+     "maxWidth": "1000px",
+     "title": "Which is the brand of your car?",
+     "description": "If you own cars from multiple brands, please select all of them.",
+     "isRequired": true,
+     "choices": [
+      "Ford",
+      "Vauxhall",
+      "Volkswagen"
+     ],
+     "separateSpecialChoices": true,
+     "showOtherItem": true,
+     "showNoneItem": true,
+     "colCount": 2,
+     "showSelectAllItem": true
+    }
+   ]
+  }
+ ],
+ "showQuestionNumbers": "off"
+}
+```
+4. Save the changes
+
+Note:
+How to create the json ?
+Answer: Use surveyjs survey creation link -> [`Survey Creator`](https://surveyjs.io/create-free-survey)
+
+If everything went well so far, congratulations! You should now see the output of the first card you created yourself. Try different entities.
+
+![success](img/success.png)
+
+### Entities & Helpers
+
+SurveyJs card totally depends on 1 entity and 3 helpers:
+
+1) Sensor: [`Documentation 1`](https://www.home-assistant.io/integrations/sensor/) & [`Documentation 2`](https://developers.home-assistant.io/docs/core/entity/sensor/)
+    * Sensor entity is used to store floor plan location
+2) input_select: [`Documentation`](https://www.home-assistant.io/integrations/input_select/)
+    * Input select helper is used to monitor surveyjs lifecycle state changes; anytime the state of the Input select entity changes, the same state change is triggered in the surveyjs sensor entity.
+3) input_text: [`Documentation`](https://www.home-assistant.io/integrations/input_text/)
+    * Input text helper is used to store surveyjs form response.
+4) timer: [`Documentation`](https://www.home-assistant.io/integrations/timer/)
+    * Timer helper is used for two purposes in our project, one is for countdown timer for surveyjs form submission and another one is for notification timer
+
+Note: The reason for using helper functions instead of sensor entities for all purposes is that state changes with sensor entities are not permanent and data is not saved in the homeassistant database.
+
+Declare entities and helpers in the homeassistant card configuration editor like in the below image:
+
+![CustomCssConfig](img/card-config-2.png)
+
+
+<!-- Badges -->
+
+[hacs-url]: https://github.com/hacs/integration
+[hacs-badge]: https://img.shields.io/badge/hacs-default-orange.svg?style=flat-square
+[release-badge]: https://img.shields.io/github/v/release/NEU-ABLE-LAB/SurveyJs-HomeAssistant-Card?style=flat-square
+[downloads-badge]: https://img.shields.io/github/downloads/NEU-ABLE-LAB/SurveyJs-HomeAssistant-Card/total?style=flat-square
+
+<!-- References -->
+
+[home-assistant]: https://www.home-assistant.io/
+[hacs]: https://hacs.xyz
+[release-url]: https://github.com/NEU-ABLE-LAB/SurveyJs-HomeAssistant-Card/releases
 
 ##  For further deep-dive into the code go to code-explainer.md
