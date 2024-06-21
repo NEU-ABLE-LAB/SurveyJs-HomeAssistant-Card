@@ -13,7 +13,6 @@ The SurveyJS Form Card is a custom integration for [Home Assistant][home-assista
 ## Prerequisites
 
 * [Development Environment](https://github.com/home-assistant-tutorials/01.development-environment)
-* the Prerequisites named there
 * basic skills of Javascript, Jquery, Web Components, Lit Library, Webpack
 * a workspace `config/www`
 
@@ -37,6 +36,8 @@ SurveyJs Form Card is available in [HACS][hacs] (Home Assistant Community Store)
 
 Open your admin account of the development environment in the web browser. Did
 you already unlock **Advanced Mode**?
+
+![unlock advanced mode](img/advanced-mode.png)
 
 Go to ***Settings*** > ***Dashboard***. Click the three dots in the upper right
 hand corner to open ***Resources***. Click ***ADD RESOURCE*** in the lower right
@@ -165,6 +166,19 @@ Declare entities and helpers in the homeassistant card configuration editor like
 
 ![CustomCssConfig](img/card-config-2.png)
 
+## Help
+
+Feel free to open an issue if something is not working as expected. 
+
+[![GitHub Issues](https://img.shields.io/badge/GitHub-Issues-green?logo=github)](https://github.com/NEU-ABLE-LAB/SurveyJs-HomeAssistant-Card/issues)
+
+Got questions or thoughts about SurveyJs Form Card? Want to share your dashboards or discoveries? You can go on the GitHub Discussions section.
+
+[![GitHub Discussions](https://img.shields.io/badge/GitHub-Discussions-lightgrey?logo=github)](https://github.com/NEU-ABLE-LAB/SurveyJs-HomeAssistant-Card/discussions)
+
+
+##  For further deep-dive into the code go to code-explainer.md
+
 
 <!-- Badges -->
 
@@ -178,5 +192,3 @@ Declare entities and helpers in the homeassistant card configuration editor like
 [home-assistant]: https://www.home-assistant.io/
 [hacs]: https://hacs.xyz
 [release-url]: https://github.com/NEU-ABLE-LAB/SurveyJs-HomeAssistant-Card/releases
-
-##  For further deep-dive into the code go to code-explainer.md
