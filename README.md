@@ -10,13 +10,7 @@ The SurveyJS Form Card is a custom integration for [Home Assistant][home-assista
 [![release][release-badge]][release-url]
 ![downloads][downloads-badge]
 
-## Prerequisites
-
-* [Development Environment](https://github.com/home-assistant-tutorials/01.development-environment)
-* basic skills of Javascript, Jquery, Web Components, Lit Library, Webpack
-* a workspace `config/www`
-
-## Installation
+# Installation
 
 ### HACS
 
@@ -31,35 +25,46 @@ SurveyJs Form Card is available in [HACS][hacs] (Home Assistant Community Store)
 
 1. Download `dist/survey-js-form-card.js` file from the [latest release][release-url].
 2. Put `survey-js-form-card.js` file into your `config/www` folder.
+3. Add reference to `survey-js-form-card.js` in Dashboard.
+    -**Using UI:** _Settings_ → _Dashboards_ → _More Options icon_ → _Resources_ → _Add Resource_ → Set _Url_ as `/local/survey-js-form-card.js` → Set _Resource type_ as `JavaScript Module`.
+    ![adding as resource](src/img/adding-as-resource_dev.png)
+    -**Note:** If you do not see the Resources menu, you will need to enable _Advanced Mode_ in your _User Profile_
+    ![unlock advanced mode](src/img/advanced-mode.png)
 
-### Adding the Resource
+# Usage
 
-Open your admin account of the development environment in the web browser. Did
-you already unlock **Advanced Mode**?
+### Entities & Helpers
 
-![unlock advanced mode](img/advanced-mode.png)
+SurveyJs card totally depends on 1 entity and 3 helpers:
 
-Go to ***Settings*** > ***Dashboard***. Click the three dots in the upper right
-hand corner to open ***Resources***. Click ***ADD RESOURCE*** in the lower right
-hand corner.
+1) Sensor: [`Documentation 1`](https://www.home-assistant.io/integrations/sensor/) & [`Documentation 2`](https://developers.home-assistant.io/docs/core/entity/sensor/)
+    * Sensor entity is used to store floor plan location
+2) input_select: [`Documentation`](https://www.home-assistant.io/integrations/input_select/)
+    * Input select helper is used to monitor surveyjs lifecycle state changes; anytime the state of the Input select entity changes, the same state change is triggered in the surveyjs sensor entity.
+3) input_text: [`Documentation`](https://www.home-assistant.io/integrations/input_text/)
+    * Input text helper is used to store surveyjs form response.
+4) timer: [`Documentation`](https://www.home-assistant.io/integrations/timer/)
+    * Timer helper is used for two purposes in our project, one is for countdown timer for surveyjs form submission and another one is for notification timer
 
-##### HACS
-As the URL enter `/hacsfiles/SurveyJs-HomeAssistant-Card/survey-js-form-card.js?hacstag=66035578447`. Choose ***JavaScript Module*** and submit.
+Note: The reason for using helper functions instead of sensor entities for all purposes is that state changes with sensor entities are not permanent and data is not saved in the homeassistant database.
 
-![adding as resource](img/adding-as-resource_prod.png)
-
-##### Manual
-As the URL enter `/local/survey-js-form-card.js`. Choose ***JavaScript Module*** and submit.
-
-![adding as resource](img/adding-as-resource_dev.png)
-
-### Using the Card
+### Card Configuration
 
 Go to a dashboard. Use the three dots in the upper right hand corner to edit the
 dashboard. Take control if required. Click ***+ ADD CARD***. At the bottom
 select ***Manual*** to add a custom card.
 
-![card configuration](img/card-config-1.png)
+In surveyjs card configuration, three properties are required:
+
+1. type: Specifies the type of the custom card.
+2. entity: Connects the card to a specific entity within Home Assistant.
+3. surveyjs_json: Defines the survey configuration in JSON format.
+
+Note:
+How to create the survey configuration json ?
+Answer: Use surveyjs survey creation link -> [`Survey Creator`](https://surveyjs.io/create-free-survey)
+
+![card configuration](src/img/card-config-1.png)
 
 In the card configuration enter:
 
@@ -98,7 +103,7 @@ surveyjs_json: {
 }
 ```
 
-1. type: custom:survey-card (Don't forget the `custom` prefix to custom element card & `custom:survey-card` name should match with whatever name we give below) -> 
+1. type: custom:survey-card (Don't forget the `custom` prefix to custom element card & `custom:survey-card` name should match with whatever name we give in the survey-js-form-card.ts like below) -> 
 ```js
 customElements.define("survey-card", SurveyCard);
 ```
@@ -139,34 +144,40 @@ customElements.define("survey-card", SurveyCard);
 ```
 4. Save the changes
 
-Note:
-How to create the json ?
-Answer: Use surveyjs survey creation link -> [`Survey Creator`](https://surveyjs.io/create-free-survey)
-
 If everything went well so far, congratulations! You should now see the output of the first card you created yourself. Try different entities.
 
-![success](img/success.png)
-
-### Entities & Helpers
-
-SurveyJs card totally depends on 1 entity and 3 helpers:
-
-1) Sensor: [`Documentation 1`](https://www.home-assistant.io/integrations/sensor/) & [`Documentation 2`](https://developers.home-assistant.io/docs/core/entity/sensor/)
-    * Sensor entity is used to store floor plan location
-2) input_select: [`Documentation`](https://www.home-assistant.io/integrations/input_select/)
-    * Input select helper is used to monitor surveyjs lifecycle state changes; anytime the state of the Input select entity changes, the same state change is triggered in the surveyjs sensor entity.
-3) input_text: [`Documentation`](https://www.home-assistant.io/integrations/input_text/)
-    * Input text helper is used to store surveyjs form response.
-4) timer: [`Documentation`](https://www.home-assistant.io/integrations/timer/)
-    * Timer helper is used for two purposes in our project, one is for countdown timer for surveyjs form submission and another one is for notification timer
-
-Note: The reason for using helper functions instead of sensor entities for all purposes is that state changes with sensor entities are not permanent and data is not saved in the homeassistant database.
+![success](src/img/success.png)
 
 Declare entities and helpers in the homeassistant card configuration editor like in the below image:
 
-![CustomCssConfig](img/card-config-2.png)
+![CustomCssConfig](src/img/card-config-2.png)
 
-## Help
+
+# Development server
+
+### Home assistant demo
+
+Set up home assistant development environment by following this: [Development Environment](https://github.com/home-assistant-tutorials/01.development-environment)
+
+Once setup is done, go to Home Assistant instance http://localhost:8123 and start configuration.
+
+### Development
+
+In another terminal, install dependencies and run development server:
+
+```sh
+npm install
+```
+
+### Build
+
+You can build the `survey-js-form-card.js` file in `dist` folder by running the build command.
+
+```sh
+npm run build
+```
+
+# Help
 
 Feel free to open an issue if something is not working as expected. 
 
@@ -177,8 +188,7 @@ Got questions or thoughts about SurveyJs Form Card? Want to share your dashboard
 [![GitHub Discussions](https://img.shields.io/badge/GitHub-Discussions-lightgrey?logo=github)](https://github.com/NEU-ABLE-LAB/SurveyJs-HomeAssistant-Card/discussions)
 
 
-##  For further deep-dive into the code go to code-explainer.md
-
+For further deep-dive into the code go to code-explainer.md
 
 <!-- Badges -->
 

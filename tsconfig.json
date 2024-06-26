@@ -1,10 +1,16 @@
 // This configuration file is used to define TypeScript compiler options
 {
-    "compilerOptions": {
-      "isolatedModules": true,
-      "target": "es2017",
-      "moduleResolution": "node",
-      "experimentalDecorators": true,
-      "useDefineForClassFields": false,
-    }
-  }
+  "compilerOptions": {
+    "isolatedModules": true,
+    "target": "es2017",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
