@@ -31,11 +31,11 @@ SurveyJs Form Card is available in [HACS][hacs] (Home Assistant Community Store)
 
    - **Using UI:** _Settings_ → _Dashboards_ → _More Options icon_ → _Resources_ → _Add Resource_ → Set _Url_ as `/local/survey-js-form-card.js` → Set _Resource type_ as `JavaScript Module`.
 
-   ![adding as resource](src/img/adding-as-resource_dev.png)
+    ![adding as resource](src/img/adding-as-resource_dev.png)
 
    - **Note:** If you do not see the Resources menu, you will need to enable _Advanced Mode_ in your _User Profile_
 
-   ![unlock advanced mode](src/img/advanced-mode.png)
+    ![unlock advanced mode](src/img/advanced-mode.png)
 
 # Usage
 
@@ -190,7 +190,7 @@ Got questions or thoughts about SurveyJs Form Card? Want to share your dashboard
 
 [![GitHub Discussions](https://img.shields.io/badge/GitHub-Discussions-lightgrey?logo=github)](https://github.com/NEU-ABLE-LAB/SurveyJs-HomeAssistant-Card/discussions)
 
-For further deep-dive into the code go to docs/code-explainer.md
+For further deep-dive into the code go to `docs/code-explainer.md`
 
 <!-- Badges -->
 
