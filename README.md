@@ -26,9 +26,12 @@ SurveyJs Form Card is available in [HACS][hacs] (Home Assistant Community Store)
 1. Download `dist/survey-js-form-card.js` file from the [latest release][release-url].
 2. Put `survey-js-form-card.js` file into your `config/www` folder.
 3. Add reference to `survey-js-form-card.js` in Dashboard.
-    -**Using UI:** _Settings_ → _Dashboards_ → _More Options icon_ → _Resources_ → _Add Resource_ → Set _Url_ as `/local/survey-js-form-card.js` → Set _Resource type_ as `JavaScript Module`.
+    - **Using UI:** _Settings_ → _Dashboards_ → _More Options icon_ → _Resources_ → _Add Resource_ → Set _Url_ as `/local/survey-js-form-card.js` → Set _Resource type_ as `JavaScript Module`.
+
     ![adding as resource](src/img/adding-as-resource_dev.png)
-    -**Note:** If you do not see the Resources menu, you will need to enable _Advanced Mode_ in your _User Profile_
+
+    - **Note:** If you do not see the Resources menu, you will need to enable _Advanced Mode_ in your _User Profile_
+
     ![unlock advanced mode](src/img/advanced-mode.png)
 
 # Usage
@@ -157,7 +160,7 @@ Declare entities and helpers in the homeassistant card configuration editor like
 
 ### Home assistant demo
 
-Set up home assistant development environment by following this: [Development Environment](https://github.com/home-assistant-tutorials/01.development-environment)
+Set up home assistant development environment by following this official documentation: [Development Environment](https://github.com/home-assistant-tutorials/01.development-environment)
 
 Once setup is done, go to Home Assistant instance http://localhost:8123 and start configuration.
 
