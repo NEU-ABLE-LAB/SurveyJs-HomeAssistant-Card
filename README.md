@@ -31,11 +31,11 @@ SurveyJs Form Card is available in [HACS][hacs] (Home Assistant Community Store)
 
    - **Using UI:** _Settings_ → _Dashboards_ → _More Options icon_ → _Resources_ → _Add Resource_ → Set _Url_ as `/local/survey-js-form-card.js` → Set _Resource type_ as `JavaScript Module`.
 
-    ![adding as resource](src/img/adding-as-resource_dev.png)
+![adding as resource](src/img/adding-as-resource_dev.png)
 
    - **Note:** If you do not see the Resources menu, you will need to enable _Advanced Mode_ in your _User Profile_
 
-    ![unlock advanced mode](src/img/advanced-mode.png)
+![unlock advanced mode](src/img/advanced-mode.png)
 
 # Usage
 
