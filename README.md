@@ -52,7 +52,7 @@ SurveyJs card totally depends on 1 entity and 3 helpers:
 4. timer: [`Documentation`](https://www.home-assistant.io/integrations/timer/)
    - Timer helper is used for two purposes in our project, one is for countdown timer for surveyjs form submission and another one is for notification timer
 
-Note: The reason for using helper functions instead of sensor entities for all purposes is that state changes with sensor entities are not permanent and data is not saved in the homeassistant database.
+**Note**: The reason for using helper functions instead of sensor entities for all purposes is that state changes with sensor entities are not permanent and data is not saved in the homeassistant database.
 
 ### Card Configuration
 
@@ -150,19 +150,17 @@ If everything went well so far, congratulations! You should now see the output o
 
 ![success](src/img/success.png)
 
-Declare entities and helpers in the homeassistant card configuration editor like in the below image:
+You can declare entities and helpers in the homeassistant card configuration editor like in the below sample image:
 
 ![CustomCssConfig](src/img/card-config-2.png)
 
 # Development server
 
-### Home assistant demo
-
-Set up home assistant development environment by following this official documentation: [Development Environment](https://github.com/home-assistant-tutorials/01.development-environment)
+Set up home assistant development environment by following this github documentation: [Development Environment](https://github.com/home-assistant-tutorials/01.development-environment)
 
 Once setup is done, go to Home Assistant instance http://localhost:8123 and start configuration.
 
-### Development
+### Install
 
 In another terminal, install dependencies and run development server:
 
@@ -178,6 +176,10 @@ You can build the `survey-js-form-card.js` file in `dist` folder by running the 
 npm run build
 ```
 
+### Update
+
+Now you can copy the bundled `survey-js-form-card.js` file from `dist` folder and paste it inside your `config/www` folder and reload Home Assistant server for updates.
+
 # Help
 
 Feel free to open an issue if something is not working as expected.
@@ -188,7 +190,7 @@ Got questions or thoughts about SurveyJs Form Card? Want to share your dashboard
 
 [![GitHub Discussions](https://img.shields.io/badge/GitHub-Discussions-lightgrey?logo=github)](https://github.com/NEU-ABLE-LAB/SurveyJs-HomeAssistant-Card/discussions)
 
-For further deep-dive into the code go to code-explainer.md
+For further deep-dive into the code go to docs/code-explainer.md
 
 <!-- Badges -->
 

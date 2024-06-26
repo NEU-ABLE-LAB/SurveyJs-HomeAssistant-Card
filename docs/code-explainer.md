@@ -21,7 +21,7 @@ too. This tutorial is based upon it.
 
 Custom css file content: 
 
-![CustomCss](img/custom-styles.png)
+![CustomCss](src/img/custom-styles.png)
 
 Need to declare a property name called customCssClassDetails at every question level in the configurations. 
  
@@ -100,7 +100,7 @@ customCssClassDetails {
 
 Global Css Usage:
 
-![CssFolder](img/css-folder.png)
+![CssFolder](src/img//css-folder.png)
 
 As in the above screenshot, you can declare the global and module level css javascript files in the css folder.
 
@@ -110,7 +110,7 @@ As in the above screenshot, you can declare the global and module level css java
 
 Apply markdown image path beside any text like below
 
-title: ![A dog](/local/img/thermometer-svgrepo-com.svg =18x18) What room are you in?
+title: ![A dog](/local/src/img//thermometer-svgrepo-com.svg =18x18) What room are you in?
 
 ### Typescript
 
@@ -121,7 +121,7 @@ We are using TypeScript in our codebase, and the TypeScript compiler options are
 We are using **Webpack** to bundle all files into a single JavaScript file by making use of the **webpack.config.js** file 
 
 Output:
-![Markdown](img/markdown.png)
+![Markdown](src/img//markdown.png)
 
  ### Homeassistant DB:
 
@@ -131,10 +131,10 @@ Output:
 
  SELECT *  FROM states LEFT JOIN states_meta ON (states.metadata_id=states_meta.metadata_id);
 
- ![Query 1](img/query_1.png)
+ ![Query 1](src/img//query_1.png)
 
  Query 2:  
  
 SELECT *  FROM states LEFT JOIN states_meta ON (states.metadata_id=states_meta.metadata_id) WHERE states_meta.entity_id = 'input_text.surveyjsresponse_u1';
 
- ![Query 2](img/query_2.png)
+ ![Query 2](src/img//query_2.png)
