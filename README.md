@@ -66,7 +66,7 @@ In surveyjs card configuration, three properties are required:
 3. surveyjs_json: Defines the survey configuration in JSON format.
 
 Note:
-## How to Create the Survey Configuration JSON
+### How to Create the Survey Configuration JSON
 
 To create the survey configuration JSON for use in your Home Assistant card, follow these steps:
 
