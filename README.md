@@ -42,7 +42,8 @@ SurveyJs Form Card is available in [HACS][hacs] (Home Assistant Community Store)
 
 SurveyJs card totally depends on 1 entity and 3 helpers:
 
-1. input_select: [`Documentation`](https://www.home-assistant.io/integrations/input_select/)
+1. survey_response_entity:
+   - HA entity type: input_select - [`Documentation`](https://www.home-assistant.io/integrations/input_select/)
    - Input select helper is used to monitor surveyjs lifecycle state changes; anytime the state of the Input select entity changes, the same state change is triggered in the surveyjs sensor entity.
 2. input_text: [`Documentation`](https://www.home-assistant.io/integrations/input_text/)
    - Input text helper is used to store surveyjs form response.
