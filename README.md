@@ -42,14 +42,17 @@ SurveyJs Form Card is available in [HACS][hacs] (Home Assistant Community Store)
 
 SurveyJs card totally depends on 1 entity and 3 helpers:
 
-1. survey_response_entity:
-   - HA entity type: input_select - [`Documentation`](https://www.home-assistant.io/integrations/input_select/)
+1. state_life_cycle_entity:
+   - HA helper type: input_select - [`Documentation`](https://www.home-assistant.io/integrations/input_select/)
    - Input select helper is used to monitor surveyjs lifecycle state changes; anytime the state of the Input select entity changes, the same state change is triggered in the surveyjs sensor entity.
-2. input_text: [`Documentation`](https://www.home-assistant.io/integrations/input_text/)
+2. survey_response_entity:
+   - HA helper type: input_text - [`Documentation`](https://www.home-assistant.io/integrations/input_text/)
    - Input text helper is used to store surveyjs form response.
-3. timer: [`Documentation`](https://www.home-assistant.io/integrations/timer/)
+3. expiry_timer:
+   - HA helper type: timer - [`Documentation`](https://www.home-assistant.io/integrations/timer/)
    - Timer helper is used for two purposes in our project, one is for countdown timer for surveyjs form submission and another one is for notification timer
-4. Sensor **_[Optional]_**: [`Documentation 1`](https://www.home-assistant.io/integrations/sensor/) & [`Documentation 2`](https://developers.home-assistant.io/docs/core/entity/sensor/)
+4. floor_plan_location:
+   - HA entity type: Sensor **_[Optional]_** - [`Documentation 1`](https://www.home-assistant.io/integrations/sensor/) & [`Documentation 2`](https://developers.home-assistant.io/docs/core/entity/sensor/)
    - Sensor entity is used to store floor plan location
 
 **Note**: The reason for using helper functions instead of sensor entities for all purposes is that state changes with sensor entities are not permanent and data is not saved in the homeassistant database.
