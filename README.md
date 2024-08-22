@@ -93,42 +93,295 @@ To create the survey configuration JSON for use in your Home Assistant card, fol
 In the card configuration enter:
 
 ```yaml
-type: custom:survey-card # Specifies that this card is a custom card named 'survey-card'
-survey_response_entity: input_text.surveyjs_response # Links the card to an input_text entity to store survey responses
-state_life_cycle_entity: input_select.surveyjs_lc # Links the card to an input_select entity to monitor survey lifecycle state changes
-floor_plan_location: sensor.location_ema # (Optional) Links the card to a sensor entity that stores floor plan location
-expiry_timer: # Specifies the configuration for the expiry timer
-  - name: timer.surveyjs_expiry # Defines the name of the timer used for the survey expiration
-    duration: '00:00:20' # Sets the duration of the expiry timer to 20 seconds
-surveyjs_json: # Contains the JSON configuration for the survey
-  {
-    "pages":
-      [
-        {
-          "name": "page1",
-          "elements":
-            [
-              {
-                "type": "checkbox",
-                "name": "car",
-                "width": "1000px",
-                "minWidth": "1000px",
-                "maxWidth": "1000px",
-                "title": "Which is the brand of your car?",
-                "description": "If you own cars from multiple brands, please select all of them.",
-                "isRequired": true,
-                "choices": ["Ford", "Vauxhall", "Volkswagen"],
-                "separateSpecialChoices": true,
-                "showOtherItem": true,
-                "showNoneItem": true,
-                "colCount": 2,
-                "showSelectAllItem": true,
-              },
-            ],
-        },
-      ],
-    "showQuestionNumbers": "off",
-  }
+{
+    "type": "custom:survey-card", # Specifies that this card is a custom card named 'survey-card'
+    "survey_response_entity": "sensor.survey_js_entity", # Links the card to an input_text entity to store survey responses
+    "surveyjs_json": { # Contains the JSON configuration for the survey
+        "title": "Minimum Survey",
+        "logoPosition": "right",
+        "pages": [
+            {
+                "name": "page1",
+                "elements": [
+                    {
+                        "type": "nouislider",
+                        "customCssClassDetails": {
+                            "nouislider": {
+                                "item": "column",
+                                "withFrame": "element-with-frame"
+                            }
+                        },
+                        "title": "How do you feel right now?",
+                        "defaultValueExpression": "0",
+                        "hideNumber": true,
+                        "name": "feel_right_now",
+                        "step": "1",
+                        "inputType": "range",
+                        "rangeMin": "-3",
+                        "rangeMax": "3",
+                        "pipsMode": "values",
+                        "pipsValues": [
+                            -3,
+                            -2,
+                            -1,
+                            0,
+                            1,
+                            2,
+                            3
+                        ],
+                        "pipsText": [
+                            {
+                                "value": -3,
+                                "text": "Much <br> Cooler"
+                            },
+                            {
+                                "value": 0,
+                                "text": "Neutral"
+                            },
+                            {
+                                "value": 3,
+                                "text": "Much <br> Warmer"
+                            }
+                        ],
+                        "tooltips": false
+                    },
+                    {
+                        "type": "nouislider",
+                        "customCssClassDetails": {
+                            "nouislider": {
+                                "item": "column",
+                                "withFrame": "element-with-frame"
+                            }
+                        },
+                        "title": "How satisfied are you with the thermal environment right now?",
+                        "defaultValueExpression": "0",
+                        "hideNumber": true,
+                        "name": "thermal_satisfaction",
+                        "step": "1",
+                        "inputType": "range",
+                        "rangeMin": "-3",
+                        "rangeMax": "3",
+                        "pipsMode": "values",
+                        "pipsValues": [
+                            -3,
+                            -2,
+                            -1,
+                            0,
+                            1,
+                            2,
+                            3
+                        ],
+                        "pipsText": [
+                            {
+                                "value": -3,
+                                "text": "Very <br> dissatisfied"
+                            },
+                            {
+                                "value": 0,
+                                "text": "Neutral"
+                            },
+                            {
+                                "value": 3,
+                                "text": "Very <br> satisfied"
+                            }
+                        ],
+                        "tooltips": false
+                    },
+                    {
+                        "type": "panel",
+                        "name": "dissatisfaction_details",
+                        "visibleIf": "{thermal_satisfaction} < 0",
+                        "elements": [
+                            {
+                                "type": "checkbox",
+                                "name": "dissatisfaction_reasons",
+                                "title": "You have expressed dissatisfaction with the temperature in your workspace. How would you best describe the source of this discomfort? (Check all that apply)",
+                                "choices": [
+                                    {
+                                        "value": "humidity_high",
+                                        "text": "Humidity too high (damp)"
+                                    },
+                                    {
+                                        "value": "humidity_low",
+                                        "text": "Humidity too low (dry)"
+                                    },
+                                    {
+                                        "value": "air_movement_high",
+                                        "text": "Air movement too high"
+                                    },
+                                    {
+                                        "value": "air_movement_low",
+                                        "text": "Air movement too low"
+                                    },
+                                    {
+                                        "value": "incoming_sun",
+                                        "text": "Incoming sun"
+                                    },
+                                    {
+                                        "value": "drafts",
+                                        "text": "Drafts from windows or vents"
+                                    },
+                                    {
+                                        "value": "area_hotter",
+                                        "text": "My area is hotter than others"
+                                    },
+                                    {
+                                        "value": "area_colder",
+                                        "text": "My area is colder than others"
+                                    },
+                                    {
+                                        "value": "thermostat_inaccessible",
+                                        "text": "Thermostat is inaccessible / controlled by others"
+                                    },
+                                    {
+                                        "value": "system_response",
+                                        "text": "Heating / cooling system does not respond quickly enough"
+                                    },
+                                    {
+                                        "value": "clothing_policy",
+                                        "text": "Clothing policy is not flexible enough"
+                                    },
+                                    {
+                                        "value": "cannot_open_windows",
+                                        "text": "I can't open or close the windows"
+                                    },
+                                    {
+                                        "value": "other",
+                                        "text": "Other"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "comment",
+                                "name": "other_reason",
+                                "visibleIf": "{dissatisfaction_reasons} contains 'other'",
+                                "title": "Please specify other reason"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "nouislider",
+                        "customCssClassDetails": {
+                            "nouislider": {
+                                "item": "column",
+                                "withFrame": "element-with-frame"
+                            }
+                        },
+                        "title": "Right now, you would prefer to be...?",
+                        "defaultValueExpression": "0",
+                        "hideNumber": true,
+                        "name": "prefer_temperature",
+                        "step": "1",
+                        "inputType": "range",
+                        "rangeMin": "-1",
+                        "rangeMax": "1",
+                        "pipsMode": "values",
+                        "pipsValues": [
+                            -1,
+                            0,
+                            1
+                        ],
+                        "pipsText": [
+                            {
+                                "value": -1,
+                                "text": "Cooler"
+                            },
+                            {
+                                "value": 0,
+                                "text": "Without <br> change"
+                            },
+                            {
+                                "value": 1,
+                                "text": "Warmer"
+                            }
+                        ],
+                        "tooltips": false
+                    },
+                    {
+                        "type": "nouislider",
+                        "customCssClassDetails": {
+                            "nouislider": {
+                                "item": "column",
+                                "withFrame": "element-with-frame"
+                            }
+                        },
+                        "title": "Right now, you would prefer...?",
+                        "defaultValueExpression": "0",
+                        "hideNumber": true,
+                        "name": "prefer_air_movement",
+                        "step": "1",
+                        "inputType": "range",
+                        "rangeMin": "-1",
+                        "rangeMax": "1",
+                        "pipsMode": "values",
+                        "pipsValues": [
+                            -1,
+                            0,
+                            1
+                        ],
+                        "pipsText": [
+                            {
+                                "value": -1,
+                                "text": "Less air <br> movement"
+                            },
+                            {
+                                "value": 0,
+                                "text": "No <br> change"
+                            },
+                            {
+                                "value": 1,
+                                "text": "More air <br> movement"
+                            }
+                        ],
+                        "tooltips": false
+                    },
+                    {
+                        "type": "nouislider",
+                        "customCssClassDetails": {
+                            "nouislider": {
+                                "withFrame": "element-with-frame"
+                            }
+                        },
+                        "title": "How strongly do you prefer this choice?",
+                        "defaultValueExpression": "0",
+                        "hideNumber": true,
+                        "name": "preference_intensity",
+                        "step": "1",
+                        "inputType": "range",
+                        "rangeMin": "0",
+                        "rangeMax": "4",
+                        "pipsMode": "values",
+                        "pipsValues": [
+                            0,
+                            1,
+                            2,
+                            3,
+                            4
+                        ],
+                        "pipsText": [
+                            {
+                                "value": 0,
+                                "text": "Not<br>at all"
+                            },
+                            {
+                                "value": 4,
+                                "text": "Very<br>Much"
+                            }
+                        ],
+                        "tooltips": false
+                    }
+                ],
+                "title": "Preference"
+            }
+        ],
+        "showTitle": false,
+        "showPageTitles": false,
+        "showQuestionNumbers": "off",
+        "questionErrorLocation": "bottom",
+        "questionTitlePattern": "numTitle",
+        "showPrevButton": false
+    }
+}
 ```
 
 If everything went well so far, congratulations! You should now see the output of the first card you created yourself.
