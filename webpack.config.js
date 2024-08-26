@@ -3,7 +3,7 @@ const path = require("path");
 
 module.exports = {
   mode: "production",
-  entry: "./survey-js-form-card.ts",
+  entry: "./src/survey-js-form-card.ts",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "survey-js-form-card.js"
